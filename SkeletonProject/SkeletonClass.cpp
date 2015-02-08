@@ -52,8 +52,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	}
 
 	mCameraRadius    = 10.0f;
-	mCameraRotationY = 1.2 * D3DX_PI;
-	mCameraRotationX = 1.2 * D3DX_PI;
+	mCameraRotationY = 0;//1.2 * D3DX_PI;
+	mCameraRotationX = 0;// 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
     // repleace or add to the following object creation
@@ -122,7 +122,7 @@ void SkeletonClass::updateScene(float dt)
 	if( gDInput->keyDown(DIK_S) )	 
 		mCameraHeight   -= 25.0f * dt;
 
-	//	Check for Mouse Input
+	//	Check for Mouse Input for changing the currentobject_index
 	if (gDInput->mouseButtonDown(0) && !m_mousedown)
 		ChangeObject();
 	else if (!gDInput->mouseButtonDown(0))
@@ -130,8 +130,8 @@ void SkeletonClass::updateScene(float dt)
 
 
 	// Divide by 50 to make mouse less sensitive. 
-	mCameraRotationY += gDInput->mouseDX() / 100.0f;
-	mCameraRotationX += gDInput->mouseDY() / 100.0f;
+	mCameraRotationY += gDInput->mouseDY() / 100.0f;
+	mCameraRotationX += gDInput->mouseDX() / 100.0f;
 
 	// If we rotate over 360 degrees, just roll back to 0
 	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
@@ -181,9 +181,19 @@ void SkeletonClass::drawScene()
 
 void SkeletonClass::buildViewMtx()
 {
-	float x = 0;// mCameraRadius;// *cosf(mCameraRotationY);
-	float y = mCameraRadius * cosf(mCameraRotationX);
-	float z = mCameraRadius/* *sinf(mCameraRotationY)*/ * sinf(mCameraRotationX);
+	float z = mCameraRadius *sinf(mCameraRotationX);
+	float xyRadius = mCameraRadius* cosf(mCameraRotationX);
+	float x = xyRadius *cosf(mCameraRotationY);
+	float y = xyRadius *sinf(mCameraRotationY);
+
+	if (mCameraRotationX >= D3DX_PI/* && mCameraRotationX < 3 * D3DX_PI/4*/)
+	{
+		y = -y;
+		//xyRadius = -xyRadius;
+		//mCameraRotationX = 2;
+	}
+
+
 	D3DXVECTOR3 pos(x, y, z);
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
