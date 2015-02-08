@@ -58,14 +58,18 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
-	//m_Objects.push_back(new Cone);
-	//m_Objects.push_back(new Sphere);
+	m_Objects.push_back(new Cylinder);
+	m_Objects.push_back(new Sphere);
 	m_Objects.push_back(new Cone);
 
 	m_Objects[0]->Create(gd3dDevice);
-	//m_Objects[1]->Create(gd3dDevice);
-	//m_Objects[2]->Create(gd3dDevice);
+	m_Objects[1]->Create(gd3dDevice);
+	m_Objects[2]->Create(gd3dDevice);
 	//m_Objects[3]->Create(gd3dDevice);
+
+	//	initialize index & mousedown
+	m_currentobject_index = 0;
+	m_mousedown = false;
 
 	onResetDevice();
 
@@ -118,6 +122,13 @@ void SkeletonClass::updateScene(float dt)
 	if( gDInput->keyDown(DIK_S) )	 
 		mCameraHeight   -= 25.0f * dt;
 
+	//	Check for Mouse Input
+	if (gDInput->mouseButtonDown(0) && !m_mousedown)
+		ChangeObject();
+	else if (!gDInput->mouseButtonDown(0))
+		m_mousedown = false;
+
+
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY += gDInput->mouseDX() / 100.0f;
 	mCameraRotationX += gDInput->mouseDY() / 100.0f;
@@ -151,11 +162,13 @@ void SkeletonClass::drawScene()
 //	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 
-    // Render all the objects
-    for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
-    {
-        m_Objects[obj]->Render( gd3dDevice, mView, mProj );
-    }
+    //// Render all the objects
+    //for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
+    //{
+    //    m_Objects[obj]->Render( gd3dDevice, mView, mProj );
+    //}
+	//	Render the currentobject_index
+	m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
 
     // display the render statistics
     GfxStats::GetInstance()->display();
@@ -182,4 +195,19 @@ void SkeletonClass::buildProjMtx()
 	float w = (float)md3dPP.BackBufferWidth;
 	float h = (float)md3dPP.BackBufferHeight;
 	D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
+}
+
+
+
+void SkeletonClass::ChangeObject(void)
+{
+	//	increment the m_currentobject_index
+	m_currentobject_index++;
+
+	//	Check if index is over current amount (3)
+	if (m_currentobject_index >= 3)
+		m_currentobject_index = 0;
+
+	//	Set m_mousedown to true so that we only iterate once per mouse click
+	m_mousedown = true;
 }

@@ -40,6 +40,9 @@ public:
 	void buildViewMtx();
 	void buildProjMtx();
 
+	//	method to change objects to view
+	void ChangeObject();
+
 private:
 	float mCameraRotationY;
 	float mCameraRotationX;
@@ -50,6 +53,11 @@ private:
 	D3DXMATRIX mProj;
 
     std::vector<BaseObject3D*>      m_Objects;
+
+	//	Variables added to "cycle" through different objects
+	int m_currentobject_index;
+	bool m_mousedown;
+
 };
 //=============================================================================
 #endif // _SKELETON_CLASS_H_
