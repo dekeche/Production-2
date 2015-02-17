@@ -113,12 +113,12 @@ void Cone::buildDemoCubeIndexBuffer(IDirect3DDevice9* gd3dDevice)
 	for (i = 1; i < mSideFacetsNum; i++)
 	{
 		k[num++] = 0;
-		k[num++] = i + 1;
 		k[num++] = i;
+		k[num++] = i + 1;
 	}
 	k[num++] = 0;
-	k[num++] = 1;
 	k[num++] = mSideFacetsNum;
+	k[num++] = 1;
 
 	//construct the Cone;
 
@@ -130,22 +130,22 @@ void Cone::buildDemoCubeIndexBuffer(IDirect3DDevice9* gd3dDevice)
 			if (i == mSideFacetsNum - 1)
 			{
 				k[num++] = base;
-				k[num++] = base - mSideFacetsNum + 1;
 				k[num++] = base + mSideFacetsNum;
+				k[num++] = base - mSideFacetsNum + 1;
 
 				k[num++] = base - mSideFacetsNum + 1;
-				k[num++] = base + 1;
 				k[num++] = base + mSideFacetsNum;
+				k[num++] = base + 1;
 			}
 			else
 			{
 				k[num++] = base;
-				k[num++] = base + 1;
 				k[num++] = base + mSideFacetsNum;
+				k[num++] = base + 1;
 
 				k[num++] = base + 1;
-				k[num++] = base + 1 + mSideFacetsNum;
 				k[num++] = base + mSideFacetsNum;
+				k[num++] = base + 1 + mSideFacetsNum;
 			}
 		}
 	}
@@ -155,12 +155,12 @@ void Cone::buildDemoCubeIndexBuffer(IDirect3DDevice9* gd3dDevice)
 	for (i = 1; i < mSideFacetsNum; i++)
 	{
 		k[num++] = cap;
-		k[num++] = cap - i - 1;
 		k[num++] = cap - i;
+		k[num++] = cap - i - 1;
 	}
 	k[num++] = cap;
-	k[num++] = cap - 1;
 	k[num++] = cap - i;
+	k[num++] = cap - 1;
 
 
 	HR(m_IndexBuffer->Unlock());

@@ -26,8 +26,6 @@ protected:
 	IDirect3DVertexBuffer9*     m_VertexBuffer;
 	IDirect3DIndexBuffer9*      m_IndexBuffer;
 
-	int m_VertexNum;
-	int m_IndexNum;
 
 protected:
     // Replace the code in the following methods
@@ -35,7 +33,7 @@ protected:
     virtual void buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice );
 
 public:
-    BaseObject3D(int vertex = 8, int index = 12);
+    BaseObject3D(void);
     ~BaseObject3D(void);
 
     // Replace or add to the following code as you progress with the material

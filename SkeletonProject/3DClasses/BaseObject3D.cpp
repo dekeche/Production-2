@@ -10,11 +10,8 @@
 #include "Vertex.h"
 #include "../GfxStats.h"
 //=============================================================================
-BaseObject3D::BaseObject3D(int vertex, int index)
+BaseObject3D::BaseObject3D(void)
 {
-	m_VertexNum = vertex;
-	m_IndexNum = index;
-
     m_VertexBuffer = NULL;
     m_IndexBuffer = NULL;
 
@@ -40,8 +37,8 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
     D3DXMATRIX& view, D3DXMATRIX& projection )
 {
     // Update the statistics singlton class
-	GfxStats::GetInstance()->addVertices(m_VertexNum);
-	GfxStats::GetInstance()->addTriangles(m_IndexNum);
+    GfxStats::GetInstance()->addVertices(8);
+    GfxStats::GetInstance()->addTriangles(12);
 
     // Set the buffers and format
     HR(gd3dDevice->SetStreamSource(0, m_VertexBuffer, 0, sizeof(VertexPos)));
@@ -54,14 +51,14 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &projection));	
     
     // Send to render
-	HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_VertexNum, 0, m_IndexNum));
+    HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12));
 }
 
 //-----------------------------------------------------------------------------
 void BaseObject3D::buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice )
 {
 	// Obtain a pointer to a new vertex buffer.
-	HR(gd3dDevice->CreateVertexBuffer(m_VertexNum * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
+	HR(gd3dDevice->CreateVertexBuffer(8 * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
 		0, D3DPOOL_MANAGED, &m_VertexBuffer, 0));
 
 	// Now lock it to obtain a pointer to its internal data, and write the
