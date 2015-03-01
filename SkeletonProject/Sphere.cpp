@@ -27,5 +27,5 @@ Sphere::~Sphere(void)
 //-----------------------------------------------------------------------------
 void Sphere::LoadObject(IDirect3DDevice9* gd3dDevice)
 {
-	D3DXCreateSphere(gd3dDevice, mRadius, mSideFacetsNum, mSideFacetsNum, &m_MeshObject, 0)
+	D3DXCreateSphere(gd3dDevice, mRadius, mSideFacetsNum, mSideFacetsNum, &m_MeshObject, 0);
 }

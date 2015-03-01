@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="3DClasses\BaseObject3D.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dApp.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectInput.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GfxStats.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletonClass.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="3DClasses\Vertex.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Cone.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMaterial.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3DClasses\BaseObject3D.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dApp.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dUtil.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectInput.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GfxStats.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletonClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="3DClasses\Vertex.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMaterial.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{864bd568-03e1-42e1-9c8b-39b75facb14a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{2bce716b-2e89-4a92-8a40-f0f6a8d1677d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Shapes">
+      <UniqueIdentifier>{852dec86-a02c-4eac-83cb-ef83e53b6b21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Shapes">
+      <UniqueIdentifier>{c732111d-334f-47f1-8bd0-976f94cee9cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="spotlight.fx" />
+    <FxCompile Include="pointlight.fx" />
+  </ItemGroup>
+</Project>
