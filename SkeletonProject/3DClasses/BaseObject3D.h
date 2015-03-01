@@ -27,7 +27,7 @@ protected:
 
 
 protected:
-	virtual void LoadObject(IDirect3DDevice9* gd3dDevice);
+	virtual void LoadObject(IDirect3DDevice9* gd3dDevice) = 0;
 
 public:
     BaseObject3D(void);
