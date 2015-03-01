@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,12 +18,14 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -82,30 +84,31 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;dxguid.lib;DxErr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3DClasses\BaseObject3D.cpp" />
     <ClCompile Include="3DClasses\Vertex.cpp" />
-    <ClCompile Include="BaseMaterial.cpp" />
+    <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />
+    <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
     <ClInclude Include="3DClasses\Vertex.h" />
-    <ClInclude Include="BaseMaterial.h" />
+    <ClInclude Include="Cone.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="pointlight.fx" />
-    <FxCompile Include="spotlight.fx" />
+    <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
