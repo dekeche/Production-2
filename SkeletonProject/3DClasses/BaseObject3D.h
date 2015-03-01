@@ -23,22 +23,19 @@ class BaseObject3D
 protected:	
     D3DXMATRIX                  m_World;
 
-	IDirect3DVertexBuffer9*     m_VertexBuffer;
-	IDirect3DIndexBuffer9*      m_IndexBuffer;
+	ID3DXMesh* m_MeshObject;
 
 
 protected:
-    // Replace the code in the following methods
-    virtual void buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice );
-    virtual void buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice );
+	virtual void LoadObject(IDirect3DDevice9* gd3dDevice);
 
 public:
     BaseObject3D(void);
     ~BaseObject3D(void);
 
     // Replace or add to the following code as you progress with the material
-    virtual void Create( IDirect3DDevice9* gd3dDevice );
-    virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
+	void Create( IDirect3DDevice9* gd3dDevice );
+    void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

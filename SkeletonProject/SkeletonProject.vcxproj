@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="3DClasses\BaseObject3D.cpp" />
     <ClCompile Include="3DClasses\Vertex.cpp" />
+    <ClCompile Include="BaseMaterial.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="d3dApp.cpp" />
@@ -101,6 +102,7 @@
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
     <ClInclude Include="3DClasses\Vertex.h" />
+    <ClInclude Include="BaseMaterial.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="d3dApp.h" />
@@ -109,6 +111,10 @@
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
     <ClInclude Include="Sphere.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="pointlight.fx" />
+    <FxCompile Include="spotlight.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
