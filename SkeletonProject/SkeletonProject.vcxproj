@@ -103,6 +103,10 @@
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="pointlight.fx" />
+    <FxCompile Include="spotlight.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
