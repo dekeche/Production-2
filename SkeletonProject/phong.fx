@@ -32,6 +32,9 @@ uniform extern float3 gLightPosW;
 //	Direction of the Light in the World
 uniform extern float3 gLightDirW;
 
+uniform extern float3 gAttenuation012;
+
+
 
 
 struct PhongOutputVS
@@ -103,7 +106,7 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1) : COLOR
 		return all_together;
 }
 
-technique Technique
+technique PhongTech
 {
 	pass P0
 	{

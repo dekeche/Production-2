@@ -359,8 +359,44 @@ void SkeletonClass::buildPhongFX()
 
 
 	//	Obtain the handles
+	obtainPhongHandles();
+
 
 }
+
+void SkeletonClass::obtainPhongHandles()
+{
+	//	set technique
+	mh_Technique = m_phong_FX->GetTechniqueByName("PhongTech");
+
+		//	set world view proj matrix
+	mh_WVP						= m_phong_FX->GetParameterByName(0, "gWVP");
+		//	set world inverse transpose
+	mh_WorldInverseTranspose	= m_phong_FX->GetParameterByName(0, "gWorldInvTrans");
+		//	eye/camera position
+	mh_eyePos					= m_phong_FX->GetParameterByName(0, "gEyePosW");
+		//	world matrix
+	mh_World					= m_phong_FX->GetParameterByName(0, "gWorld");
+		//	Light components
+	mh_ambientLight				= m_phong_FX->GetParameterByName(0, "gAmbientLight");
+	mh_diffuseLight				= m_phong_FX->GetParameterByName(0, "gDiffuseLight");
+	mh_specularLight			= m_phong_FX->GetParameterByName(0, "gSpecLight");
+
+		//	Light as a Vector
+	mh_LightVecW				= m_phong_FX->GetParameterByName(0, "gLightVecW");
+
+		//	Light as a position & direction
+	mh_LightPosW				= m_phong_FX->GetParameterByName(0, "gLightPosW");
+	mh_LightDirectW				= m_phong_FX->GetParameterByName(0, "gLightDirW");
+
+		//	attuenuation of light
+	mh_attenuation				= m_phong_FX->GetParameterByName(0, "gAttenuation012");
+
+
+}
+
+
+
 void SkeletonClass::buildSpotFX()
 {
 	//	Buffer for any errors
@@ -374,5 +410,40 @@ void SkeletonClass::buildSpotFX()
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
 
 	//	Obtain the handles
+	obtainSpotHandles();
+
+}
+
+void SkeletonClass::obtainSpotHandles()
+{
+	//	set technique
+	mh_Technique = m_spot_FX->GetTechniqueByName("PhongTech");
+
+	//	set world view proj matrix
+	mh_WVP = m_spot_FX->GetParameterByName(0, "gWVP");
+	//	set world inverse transpose
+	mh_WorldInverseTranspose = m_spot_FX->GetParameterByName(0, "gWorldInvTrans");
+	//	eye/camera position
+	mh_eyePos = m_spot_FX->GetParameterByName(0, "gEyePosW");
+	//	world matrix
+	mh_World = m_spot_FX->GetParameterByName(0, "gWorld");
+	//	Light components
+	mh_ambientLight = m_spot_FX->GetParameterByName(0, "gAmbientLight");
+	mh_diffuseLight = m_spot_FX->GetParameterByName(0, "gDiffuseLight");
+	mh_specularLight = m_spot_FX->GetParameterByName(0, "gSpecLight");
+
+	//	Light as a Vector
+	mh_LightVecW = m_spot_FX->GetParameterByName(0, "gLightVecW");
+
+	//	Light as a position & direction
+	mh_LightPosW = m_spot_FX->GetParameterByName(0, "gLightPosW");
+	mh_LightDirectW = m_spot_FX->GetParameterByName(0, "gLightDirW");
+
+	//	attuenuation of light
+	mh_attenuation = m_spot_FX->GetParameterByName(0, "gAttenuation012");
+
+	//	power of the spotlight
+	mh_spotPower = m_spot_FX->GetParameterByName(0, "gSpotPower");
+
 
 }

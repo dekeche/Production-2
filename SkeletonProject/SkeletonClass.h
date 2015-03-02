@@ -90,6 +90,7 @@ private:
 	//	Shaders
 	ID3DXEffect* m_current_effect;
 	ID3DXEffect* m_phong_FX;
+	const std::string PHONG_TECHNIQUE = "Technique";
 	ID3DXEffect* m_spot_FX;
 		//	HANDLES
 	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
@@ -106,9 +107,19 @@ private:
 	D3DXHANDLE mh_specularPower;			//	"Shininess" of specular component
 	D3DXHANDLE mh_eyePos;					//	Position of the Eye(camera) in the World.
 	D3DXHANDLE mh_World;					//	Matrix of the WORLD.
+
+	D3DXHANDLE mh_LightPosW;				//	Position of a light in the WORLD
+	D3DXHANDLE mh_LightDirectW;				//	Direction of a light in the WORLD
+	D3DXHANDLE mh_attenuation;				//	attenuation of the LIGHT
+
+	D3DXHANDLE mh_spotPower;				//	power of a SPOTLIGHT
+		
+	
 		//	Function for SHADER
 	void buildPhongFX();
+	void obtainPhongHandles();
 	void buildSpotFX();
+	void obtainSpotHandles();
 
 
 };
