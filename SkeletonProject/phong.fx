@@ -107,6 +107,8 @@ technique Technique
 {
 	pass P0
 	{
-
+		//	Specify vertex & pixel shader associated w/ this pass
+		vertexShader = compile vs_2_0 PhongVS();
+		pixelShader = compile ps_2_0 PhongPS();
 	}
 }
