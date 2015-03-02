@@ -103,7 +103,7 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1) : COLOR
 		return all_together;
 }
 
-technique Technique
+technique PhongTech
 {
 	pass P0
 	{

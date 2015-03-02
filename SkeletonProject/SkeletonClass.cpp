@@ -60,8 +60,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 
-	buildPhongFX();
 	buildSpotFX();
+	buildPhongFX();
 
 	BaseMaterial basic;
 
@@ -174,10 +174,17 @@ void SkeletonClass::updateScene(float dt)
 	gDInput->poll();
 
 	// Check input.
-	if( gDInput->keyDown(DIK_W) )	 
-		mCameraHeight   += 25.0f * dt;
-	if( gDInput->keyDown(DIK_S) )	 
-		mCameraHeight   -= 25.0f * dt;
+	if (gDInput->keyDown(DIK_W))
+		i_Solid_frame++;
+
+	if (gDInput->keyDown(DIK_T))
+		i_texture_on++;
+
+	if (gDInput->keyDown(DIK_S))
+		i_spec_on++;
+
+	if (gDInput->keyDown(DIK_D))
+		i_diff_on++;
 
 	//	Check for "O" input for changing currentobject_index
 	if (gDInput->keyDown(DIK_O) && !m_key_O_down)
@@ -189,6 +196,7 @@ void SkeletonClass::updateScene(float dt)
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY += gDInput->mouseDY() / 100.0f;
 	mCameraRotationX += gDInput->mouseDX() / 100.0f;
+	mCameraRadius += gDInput->mouseDZ() / 100.0f;
 
 	// If we rotate over 360 degrees, just roll back to 0
 	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
