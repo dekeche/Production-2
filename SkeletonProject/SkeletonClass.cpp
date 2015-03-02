@@ -102,7 +102,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//	Initialize World components
 		//	Light
 	m_Light_vector_W = D3DXVECTOR3(0.0, 0.0f, -1.0f);	//	shine towards negative Z direction
-	m_Light_diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light_diffuse = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
 	m_Light_ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
 	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -192,7 +192,7 @@ void SkeletonClass::updateScene(float dt)
 	// Check input.
 	if (gDInput->keyDown(DIK_W) && !m_key_W_down)
 	{
-		i_Solid_frame++;
+		//i_Solid_frame = !i_Solid_frame;
 		m_key_W_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_W))
@@ -267,8 +267,16 @@ void SkeletonClass::drawScene()
 	HR(gd3dDevice->BeginScene());
 
     // Set render statws for the entire scene here:
-//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
-	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+
+	//	Check if we're SOLID or WIRE frame
+	if (i_Solid_frame)
+	{
+		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
+	}
+	else
+	{
+		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+	}
 
 	ID3DXEffect* current;
 	//	Setup the rendering EFFECT
@@ -282,7 +290,7 @@ void SkeletonClass::drawScene()
 			m_current_effect = m_phong_FX;
 			obtainPhongHandles();
 			break;
-		case 2: // Gouraud
+		case 2: // Spot
 			m_current_effect = m_spot_FX;
 			obtainSpotHandles();
 			break;

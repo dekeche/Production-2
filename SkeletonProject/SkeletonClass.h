@@ -81,6 +81,7 @@ private:
 					//	Shader Indices
 					/*	0 - None(?)
 						1 - Phong
+						2 - Spotlight
 					*/
 	int m_current_shader_index = 0;
 
