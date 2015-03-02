@@ -219,22 +219,30 @@ void SkeletonClass::drawScene()
 //	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 
-
+	ID3DXEffect* current;
 	//	Setup the rendering EFFECT
 	switch (m_current_shader_index)
 	{
 		case 0:	//	NONE
 			break;
 		case 1:	//	PHONG
-		{
-					//	set technique
-					HR(m_phong_FX->SetTechnique(mh_Technique));
-
-
-		}
+			current = m_phong_FX;
+			break;
+		case 2: // Gouraud
+			current = m_spot_FX;
 			break;
 	}
+	m_Objects[m_currentobject_index]->setEffect(current);
+	UINT numPasses = 0;
+	HR(current->Begin(&numPasses, 0));
+	for (UINT i = 0; i < numPasses; ++i)
+	{
+		HR(current->BeginPass(i));
+		m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
 
+		HR(current->EndPass());
+	}
+	HR(current->End());
 
 
 	/*
