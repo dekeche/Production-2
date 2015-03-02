@@ -60,19 +60,29 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 
-	HR(D3DXCreateEffectFromFile(gd3dDevice, "pointlight.fx",
-		0, 0, D3DXSHADER_DEBUG, 0, &mEffect, 0));
+	buildPhongFX();
+	buildSpotFX();
 
 	BaseMaterial basic;
 
-	basic.ConnectToEffect(mEffect);
-	basic.setMat(D3DXCOLOR())
+	basic.ConnectToEffect(m_spot_FX);
+	basic.setMat(RED, RED, WHITE, 8.0f);
 
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
-	m_Objects.push_back(new Cylinder);
-	m_Objects.push_back(new Sphere);
-	m_Objects.push_back(new Cone);
+	BaseObject3D* temp;
+
+	temp = new Cylinder();
+	temp->setMaterial(&basic);
+	m_Objects.push_back(temp);
+
+	temp = new Sphere();
+	temp->setMaterial(&basic);
+	m_Objects.push_back(temp);
+
+	temp = new Cone();
+	temp->setMaterial(&basic);
+	m_Objects.push_back(temp);
 
 	//	Initialize World components
 		//	Light
@@ -91,33 +101,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_key_O_down = false;
 
 
-
-
-
-	//	Create Meshes/Objects
-
-
-	//	!!!!!!!!!!!!!!!!!		Will need to use D3DXCreate[...] function here			?????????????????????????????????????
-
-
-		//	*** Replace this code here?
-	//// repleace or add to the following object creation
-	////m_Objects.push_back( new BaseObject3D );
-	//m_Objects.push_back(new Cylinder);
-	//m_Objects.push_back(new Sphere);
-	//m_Objects.push_back(new Cone);
-
-	//m_Objects[0]->Create(gd3dDevice);
-	//m_Objects[1]->Create(gd3dDevice);
-	//m_Objects[2]->Create(gd3dDevice);
-	////m_Objects[3]->Create(gd3dDevice);
-
-
-
-	//	Build Effects
-	buildPhongFX();
-
-
 	onResetDevice();
 
 	InitAllVertexDeclarations();
@@ -134,6 +117,7 @@ SkeletonClass::~SkeletonClass()
 
 	//	Destroy effects
 	ReleaseCOM(m_phong_FX);
+	ReleaseCOM(m_spot_FX);
 
 	DestroyAllVertexDeclarations();
 }
@@ -163,6 +147,7 @@ void SkeletonClass::onLostDevice()
 	
 	//	Effects
 	HR(m_phong_FX->OnLostDevice());
+	HR(m_spot_FX->OnLostDevice());
 }
 
 void SkeletonClass::onResetDevice()
@@ -171,6 +156,7 @@ void SkeletonClass::onResetDevice()
 
 	//	Effects
 	HR(m_phong_FX->OnResetDevice());
+	HR(m_spot_FX->OnResetDevice());
 
 	// The aspect ratio depends on the backbuffer dimensions, which can 
 	// possibly change after a reset.  So rebuild the projection matrix.
@@ -322,6 +308,21 @@ void SkeletonClass::buildPhongFX()
 
 	//	Create FX from .fx file
 	HR(D3DXCreateEffectFromFile(gd3dDevice, "phong.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_phong_FX, &errors));
+
+	//	Check for & display any errors
+	if (errors)
+		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
+
+	//	Obtain the handles
+
+}
+void SkeletonClass::buildSpotFX()
+{
+	//	Buffer for any errors
+	ID3DXBuffer* errors = 0;
+
+	//	Create FX from .fx file
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "spotlight.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_spot_FX, &errors));
 
 	//	Check for & display any errors
 	if (errors)

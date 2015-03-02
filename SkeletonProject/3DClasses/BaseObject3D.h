@@ -38,7 +38,6 @@ protected:
 
 public:
     BaseObject3D(void);
-	BaseObject3D(BaseMaterial* mat);
     ~BaseObject3D(void);
 
 	void setMaterial(BaseMaterial* mat){ m_Material = mat; }
