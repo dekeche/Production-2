@@ -221,12 +221,17 @@ void SkeletonClass::drawScene()
 
 	ID3DXEffect* current;
 	//	Setup the rendering EFFECT
+		//	iterate between various shaders
 	switch (m_current_shader_index)
 	{
 		case 0:	//	NONE
+			m_current_effect = nullptr;
 			break;
 		case 1:	//	PHONG
 			current = m_phong_FX;
+		{
+			m_current_effect = m_phong_FX;
+		}
 			break;
 		case 2: // Gouraud
 			current = m_spot_FX;
@@ -243,6 +248,36 @@ void SkeletonClass::drawScene()
 		HR(current->EndPass());
 	}
 	HR(current->End());
+	if (m_current_effect != nullptr)
+	{
+		//	set technique
+		HR(m_current_effect->SetTechnique(mh_Technique));
+		//	set world view proj matrix
+		HR(m_current_effect->SetMatrix(mh_WVP, &(mWorld*mView*mProj)));
+
+		//	Set world inverse transpose matrix
+		D3DXMATRIX worldInverseTranspose;
+		D3DXMatrixInverse(&worldInverseTranspose, 0, &mWorld);
+		D3DXMatrixTranspose(&worldInverseTranspose, &worldInverseTranspose);
+		HR(m_current_effect->SetMatrix(mh_WorldInverseTranspose, &worldInverseTranspose));
+
+		//	Set values of World Light
+		HR(m_current_effect->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
+		HR(m_current_effect->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
+		HR(m_current_effect->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
+
+
+		//	Set values of OBJECT MATERIAL
+		/* current object variable */
+		//HR(m_current_effect->SetValue(object_handler_diffuse, actual_value, sizeof(D3DXCOLOR)));
+		//HR(m_current_effect->SetValue(object_handler_ambient, actual_value, sizeof(D3DXCOLOR)));
+		//HR(m_current_effect->SetValue(object_handler_specular, actual_value, sizeof(D3DXCOLOR)));
+		//HR(m_current_effect->SetValue(object_handler_spec_power, actual_value, sizeof(D3DXCOLOR)));
+
+
+		//	Set world Matrix
+	}
+
 
 
 	/*
@@ -320,6 +355,8 @@ void SkeletonClass::buildPhongFX()
 	//	Check for & display any errors
 	if (errors)
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
+
+
 
 	//	Obtain the handles
 
