@@ -13,6 +13,7 @@
 //=============================================================================
 #include <d3dx9.h>
 
+#include "../BaseMaterial.h"
 #include "../d3dUtil.h"
 
 #include "../BaseMaterial.h"
@@ -26,6 +27,7 @@ protected:
     D3DXMATRIX                  m_World;
 
 	ID3DXMesh* m_MeshObject;
+	BaseMaterial* m_Material;
 
 
 	//	The material object that defines this mesh's color & material
@@ -36,8 +38,11 @@ protected:
 
 public:
     BaseObject3D(void);
+	BaseObject3D(BaseMaterial* mat);
     ~BaseObject3D(void);
 
+	void setMaterial(BaseMaterial* mat){ m_Material = mat; }
+	void setEffect(ID3DXEffect* effect){ m_Material->ConnectToEffect(effect); }
     // Replace or add to the following code as you progress with the material
 	void Create( IDirect3DDevice9* gd3dDevice );
     void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );

@@ -59,7 +59,20 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraRotationX = 0;// 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
-    
+
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "pointlight.fx",
+		0, 0, D3DXSHADER_DEBUG, 0, &mEffect, 0));
+
+	BaseMaterial basic;
+
+	basic.ConnectToEffect(mEffect);
+	basic.setMat(D3DXCOLOR())
+
+    // repleace or add to the following object creation
+    //m_Objects.push_back( new BaseObject3D );
+	m_Objects.push_back(new Cylinder);
+	m_Objects.push_back(new Sphere);
+	m_Objects.push_back(new Cone);
 
 	//	Initialize World components
 		//	Light

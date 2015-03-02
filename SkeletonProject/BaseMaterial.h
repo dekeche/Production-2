@@ -15,27 +15,22 @@ class BaseMaterial
 protected:
     ID3DXEffect*        m_Effect;               // the shader associate effect file
 
-    //-------- Material Parameters -------
-    D3DXMATRIX          m_WorldMat;
-    D3DXMATRIX          m_ViewProjectionMat;
-
-    D3DXVECTOR3         m_DiffuseColor;
-    D3DXVECTOR3         m_SpecularColor;
-    float               m_Shininess;            // specualr power
+	D3DXCOLOR m_Ambient;
+	D3DXCOLOR m_Diffuse;
+	D3DXCOLOR m_Spec;
+	float m_SpecPower;           // specualr power
 
 
     //---------- Shader Handles ----------
     // Generic shader handles
     D3DXHANDLE          m_WorldMatHandle;    
-    D3DXHANDLE          m_ViewProjectionMatHandel;
+	D3DXHANDLE          m_ViewProjectionMatHandel;
 
-    D3DXHANDLE          m_LightPosWHandle;       // Position (spot/point) / Direction (directional)
-    D3DXHANDLE          m_ViewerPosWHandle;
+	D3DXHANDLE          m_AmbientHandel;
+	D3DXHANDLE          m_DiffuseHandel;
+	D3DXHANDLE          m_SpecHandel;
+	D3DXHANDLE          m_SpecPowerHandel;
 
-    // Material specific shader handles
-    D3DXHANDLE          m_DIffuseColHandle;    
-    D3DXHANDLE          m_SpecularColHandle;       
-    D3DXHANDLE          m_ShininessHandle;   
 
 
 public:
@@ -43,6 +38,7 @@ public:
     virtual ~BaseMaterial(void);
 
     void ConnectToEffect( ID3DXEffect* effect );
+	void setMat(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, float specPower );
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
 };
 //=============================================================================
