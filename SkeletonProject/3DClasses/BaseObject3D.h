@@ -14,6 +14,8 @@
 #include <d3dx9.h>
 
 #include "../d3dUtil.h"
+
+#include "../BaseMaterial.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;
@@ -25,6 +27,9 @@ protected:
 
 	ID3DXMesh* m_MeshObject;
 
+
+	//	The material object that defines this mesh's color & material
+	BaseMaterial* m_ObjectMaterial;
 
 protected:
 	virtual void LoadObject(IDirect3DDevice9* gd3dDevice) = 0;

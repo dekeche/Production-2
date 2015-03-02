@@ -51,12 +51,64 @@ private:
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
+	D3DXMATRIX mWorld;
+
+
+	//	World Light variables
+	D3DXVECTOR3 m_Light_vector_W;		//	Light Vector in the World
+	D3DXCOLOR m_Light_ambient;
+	D3DXCOLOR m_Light_diffuse;
+	D3DXCOLOR m_Light_specular;
+
+
 
     std::vector<BaseObject3D*>      m_Objects;
 
 	//	Variables added to "cycle" through different objects
 	int m_currentobject_index;
-	bool m_mousedown;
+	bool m_key_O_down = false;
+
+
+
+	//	Variables added to "cycle" through different shaders
+					//	Shader Indices
+					/*	0 - None(?)
+						1 - Phong
+					*/
+	int m_current_shader_index = 1;
+
+
+	//	Variables added to toggle various features
+		//	Solid & WireFrame
+	bool i_Solid_frame = true;
+		//	With/Without Texture
+	bool i_texture_on = false;
+		//	Specular on/off
+	bool i_spec_on = true;
+		//	Diffuse on/off
+	bool i_diff_on = true;
+
+	//	Shaders
+	ID3DXEffect* m_phong_FX;
+		//	HANDLES
+	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
+					//	For BEST simplicity, have the technique be called "Technique" unless stated otherwise
+	D3DXHANDLE mh_WVP;						//	world view projection matrix
+	D3DXHANDLE mh_WorldInverseTranspose;	//	Inverse of the World matrix
+	D3DXHANDLE mh_LightVecW;				//	World vector of Light
+//	D3DXHANDLE mh_diffuseMtrl;				//	Diffuse material of the mesh(object)
+	D3DXHANDLE mh_diffuseLight;				//	Diffuse of the Light
+//	D3DXHANDLE mh_ambientMtrl;				//	Ambient material to use
+	D3DXHANDLE mh_ambientLight;				//	Ambient of the Lgith
+//	D3DXHANDLE mh_specularMtrl;				//	Specular material/component
+	D3DXHANDLE mh_specularLight;			//	Specular of the Light
+	D3DXHANDLE mh_specularPower;			//	"Shininess" of specular component
+	D3DXHANDLE mh_eyePos;					//	Position of the Eye(camera) in the World.
+	D3DXHANDLE mh_World;					//	Matrix of the WORLD.
+		//	Function for SHADER
+	void buildPhongFX();
+					
+
 
 };
 //=============================================================================

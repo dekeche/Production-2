@@ -82,7 +82,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="spotlight.fx" />
-    <FxCompile Include="pointlight.fx" />
+    <None Include="pointlight.fx" />
+    <None Include="spotlight.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="phong.fx" />
   </ItemGroup>
 </Project>

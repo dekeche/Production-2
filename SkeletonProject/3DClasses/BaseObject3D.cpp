@@ -19,6 +19,10 @@ BaseObject3D::BaseObject3D(void)
 BaseObject3D::~BaseObject3D(void)
 {
 	ReleaseCOM(m_MeshObject);
+
+
+	//	destroy pointer to BaseMaterial
+	delete m_ObjectMaterial;
 }
 
 //-----------------------------------------------------------------------------

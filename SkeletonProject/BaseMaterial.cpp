@@ -26,6 +26,9 @@ BaseMaterial::~BaseMaterial(void)
 void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 {
     m_Effect = effect;
+
+	//	Set handles to effect
+
 }
 
 //=============================================================================

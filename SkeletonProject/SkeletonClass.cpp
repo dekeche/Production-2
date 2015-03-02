@@ -51,25 +51,59 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
+
+
+	//	Initialize camera
 	mCameraRadius    = 10.0f;
 	mCameraRotationY = 0;//1.2 * D3DX_PI;
 	mCameraRotationX = 0;// 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
-    // repleace or add to the following object creation
-    //m_Objects.push_back( new BaseObject3D );
-	m_Objects.push_back(new Cylinder);
-	m_Objects.push_back(new Sphere);
-	m_Objects.push_back(new Cone);
+    
 
-	m_Objects[0]->Create(gd3dDevice);
-	m_Objects[1]->Create(gd3dDevice);
-	m_Objects[2]->Create(gd3dDevice);
-	//m_Objects[3]->Create(gd3dDevice);
+	//	Initialize World components
+		//	Light
+	m_Light_vector_W = D3DXVECTOR3(0.0, 0.0f, -1.0f);	//	shine towards negative Z direction
+	m_Light_diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light_ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-	//	initialize index & mousedown
+
+	//	Initialize the World Matrix (centered in origin, ie identity matrix)
+	D3DXMatrixIdentity(&mWorld);
+
+
+	//	initialize object index & key down
 	m_currentobject_index = 0;
-	m_mousedown = false;
+	m_key_O_down = false;
+
+
+
+
+
+	//	Create Meshes/Objects
+
+
+	//	!!!!!!!!!!!!!!!!!		Will need to use D3DXCreate[...] function here			?????????????????????????????????????
+
+
+		//	*** Replace this code here?
+	//// repleace or add to the following object creation
+	////m_Objects.push_back( new BaseObject3D );
+	//m_Objects.push_back(new Cylinder);
+	//m_Objects.push_back(new Sphere);
+	//m_Objects.push_back(new Cone);
+
+	//m_Objects[0]->Create(gd3dDevice);
+	//m_Objects[1]->Create(gd3dDevice);
+	//m_Objects[2]->Create(gd3dDevice);
+	////m_Objects[3]->Create(gd3dDevice);
+
+
+
+	//	Build Effects
+	buildPhongFX();
+
 
 	onResetDevice();
 
@@ -80,26 +114,50 @@ SkeletonClass::~SkeletonClass()
 {
     GfxStats::DeleteInstance();
 
+	//	Delete objects
     for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
         delete m_Objects[obj];
     m_Objects.clear();
+
+	//	Destroy effects
+	ReleaseCOM(m_phong_FX);
 
 	DestroyAllVertexDeclarations();
 }
 
 bool SkeletonClass::checkDeviceCaps()
 {
+	//return true;
+
+	//	**Referenced from AmbientDiffuseSpecularDemo**
+	D3DCAPS9 caps;
+	HR(gd3dDevice->GetDeviceCaps(&caps));
+
+	// Check for vertex shader version 2.0 support.
+	if (caps.VertexShaderVersion < D3DVS_VERSION(2, 0))
+		return false;
+
+	// Check for pixel shader version 2.0 support.
+	if (caps.PixelShaderVersion < D3DPS_VERSION(2, 0))
+		return false;
+
 	return true;
 }
 
 void SkeletonClass::onLostDevice()
 {
 	GfxStats::GetInstance()->onLostDevice();
+	
+	//	Effects
+	HR(m_phong_FX->OnLostDevice());
 }
 
 void SkeletonClass::onResetDevice()
 {
 	GfxStats::GetInstance()->onResetDevice();
+
+	//	Effects
+	HR(m_phong_FX->OnResetDevice());
 
 	// The aspect ratio depends on the backbuffer dimensions, which can 
 	// possibly change after a reset.  So rebuild the projection matrix.
@@ -122,11 +180,11 @@ void SkeletonClass::updateScene(float dt)
 	if( gDInput->keyDown(DIK_S) )	 
 		mCameraHeight   -= 25.0f * dt;
 
-	//	Check for Mouse Input for changing the currentobject_index
-	if (gDInput->mouseButtonDown(0) && !m_mousedown)
+	//	Check for "O" input for changing currentobject_index
+	if (gDInput->keyDown(DIK_O) && !m_key_O_down)
 		ChangeObject();
-	else if (!gDInput->mouseButtonDown(0))
-		m_mousedown = false;
+	else if (!gDInput->keyDown(DIK_O))
+		m_key_O_down = false;
 
 
 	// Divide by 50 to make mouse less sensitive. 
@@ -162,13 +220,34 @@ void SkeletonClass::drawScene()
 //	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 
+
+	//	Setup the rendering EFFECT
+	switch (m_current_shader_index)
+	{
+		case 0:	//	NONE
+			break;
+		case 1:	//	PHONG
+		{
+					//	set technique
+					HR(m_phong_FX->SetTechnique(mh_Technique));
+
+
+		}
+			break;
+	}
+
+
+
+	/*
     //// Render all the objects
     //for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
     //{
     //    m_Objects[obj]->Render( gd3dDevice, mView, mProj );
     //}
+
 	//	Render the currentobject_index
 	m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
+	*/
 
     // display the render statistics
     GfxStats::GetInstance()->display();
@@ -219,5 +298,22 @@ void SkeletonClass::ChangeObject(void)
 		m_currentobject_index = 0;
 
 	//	Set m_mousedown to true so that we only iterate once per mouse click
-	m_mousedown = true;
+	m_key_O_down = true;
+}
+
+
+void SkeletonClass::buildPhongFX()
+{
+	//	Buffer for any errors
+	ID3DXBuffer* errors = 0;
+
+	//	Create FX from .fx file
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "phong.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_phong_FX, &errors));
+
+	//	Check for & display any errors
+	if (errors)
+		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
+
+	//	Obtain the handles
+
 }

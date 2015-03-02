@@ -60,6 +60,16 @@ extern IDirect3DDevice9* gd3dDevice;
     clsName*    clsName::ms_instance = NULL;
 
 //==============================================================================
+// Colors and Materials
+
+const D3DXCOLOR WHITE(1.0f, 1.0f, 1.0f, 1.0f);
+const D3DXCOLOR BLACK(0.0f, 0.0f, 0.0f, 1.0f);
+const D3DXCOLOR RED(1.0f, 0.0f, 0.0f, 1.0f);
+const D3DXCOLOR GREEN(0.0f, 1.0f, 0.0f, 1.0f);
+const D3DXCOLOR BLUE(0.0f, 0.0f, 1.0f, 1.0f);
+
+
+//==============================================================================
 // Clean up
 
 #define ReleaseCOM(x) { if(x){ x->Release();x = 0; } }
