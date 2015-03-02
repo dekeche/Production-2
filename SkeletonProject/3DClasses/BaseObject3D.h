@@ -39,7 +39,7 @@ public:
 	void setMaterial(BaseMaterial* mat){ m_Material = mat; }
 	void setEffect(ID3DXEffect* effect){ m_Material->ConnectToEffect(effect); }
     // Replace or add to the following code as you progress with the material
-	void Create( IDirect3DDevice9* gd3dDevice );
+	void Create( IDirect3DDevice9* gd3dDevice);
     void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
 };
 //=============================================================================

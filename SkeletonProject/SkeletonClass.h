@@ -19,6 +19,7 @@
 #pragma once
 //=============================================================================
 #include "d3dApp.h"
+#include "BaseMaterial.h"
 
 #include <vector>
 //=============================================================================
@@ -44,6 +45,8 @@ public:
 	void ChangeObject();
 
 private:
+	BaseMaterial *mConeMaterial;
+
 	float mCameraRotationY;
 	float mCameraRotationX;
 	float mCameraRadius;
@@ -74,7 +77,7 @@ private:
 					/*	0 - None(?)
 						1 - Phong
 					*/
-	int m_current_shader_index = 1;
+	int m_current_shader_index = 2;
 
 
 	//	Variables added to toggle various features

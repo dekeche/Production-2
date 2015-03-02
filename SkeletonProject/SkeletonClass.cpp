@@ -65,10 +65,10 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	buildSpotFX();
 	buildPhongFX();
 
-	BaseMaterial basic;
+	mConeMaterial = new BaseMaterial();
 
-	basic.ConnectToEffect(m_spot_FX);
-	basic.setMat(RED, RED, WHITE, 8.0f);
+	mConeMaterial->ConnectToEffect(m_spot_FX);
+	mConeMaterial->setMat(RED, RED, WHITE, 8.0f);
 
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
@@ -76,27 +76,27 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	temp = new Cylinder();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(&basic);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Sphere();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(&basic);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Cone();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(&basic);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Torus();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(&basic);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Teapot();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(&basic);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	//	Initialize World components
@@ -123,6 +123,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 SkeletonClass::~SkeletonClass()
 {
+	delete mConeMaterial;
     GfxStats::DeleteInstance();
 
 	//	Delete objects
@@ -251,26 +252,15 @@ void SkeletonClass::drawScene()
 			m_current_effect = nullptr;
 			break;
 		case 1:	//	PHONG
-			current = m_phong_FX;
-		{
 			m_current_effect = m_phong_FX;
-		}
+			obtainPhongHandles();
 			break;
 		case 2: // Gouraud
-			current = m_spot_FX;
+			m_current_effect = m_spot_FX;
+			obtainSpotHandles();
 			break;
 	}
-	m_Objects[m_currentobject_index]->setEffect(current);
-	UINT numPasses = 0;
-	HR(current->Begin(&numPasses, 0));
-	for (UINT i = 0; i < numPasses; ++i)
-	{
-		HR(current->BeginPass(i));
-		m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
-
-		HR(current->EndPass());
-	}
-	HR(current->End());
+	m_Objects[m_currentobject_index]->setEffect(m_current_effect);
 	if (m_current_effect != nullptr)
 	{
 		//	set technique
@@ -290,6 +280,16 @@ void SkeletonClass::drawScene()
 		HR(m_current_effect->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
 
 
+		UINT numPasses = 0;
+		HR(m_current_effect->Begin(&numPasses, 0));
+		for (UINT i = 0; i < numPasses; ++i)
+		{
+			HR(m_current_effect->BeginPass(i));
+			m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
+
+			HR(m_current_effect->EndPass());
+		}
+		HR(m_current_effect->End());
 		//	Set values of OBJECT MATERIAL
 		/* current object variable */
 		//HR(m_current_effect->SetValue(object_handler_diffuse, actual_value, sizeof(D3DXCOLOR)));
@@ -299,6 +299,10 @@ void SkeletonClass::drawScene()
 
 
 		//	Set world Matrix
+	}
+	else
+	{
+		m_Objects[m_currentobject_index]->Render(gd3dDevice, mView, mProj);
 	}
 
 
@@ -384,6 +388,10 @@ void SkeletonClass::buildPhongFX()
 	//	Obtain the handles
 	obtainPhongHandles();
 
+	D3DXCOLOR temp = 0.4f*BLACK;
+	HR(m_phong_FX->SetValue(mh_ambientLight, &temp, sizeof(D3DXCOLOR)));
+	HR(m_phong_FX->SetValue(mh_diffuseLight, &BLACK, sizeof(D3DXCOLOR)));
+	HR(m_phong_FX->SetValue(mh_specularLight, &BLACK, sizeof(D3DXCOLOR)));
 
 }
 
@@ -435,12 +443,15 @@ void SkeletonClass::buildSpotFX()
 	//	Obtain the handles
 	obtainSpotHandles();
 
+	D3DXCOLOR temp = 0.4f*BLACK;
+	HR(m_spot_FX->SetValue(mh_ambientLight, &temp, sizeof(D3DXCOLOR)));
+	HR(m_spot_FX->SetValue(mh_diffuseLight, &BLACK, sizeof(D3DXCOLOR)));
+	HR(m_spot_FX->SetValue(mh_specularLight, &BLACK, sizeof(D3DXCOLOR)));
 }
-
 void SkeletonClass::obtainSpotHandles()
 {
 	//	set technique
-	mh_Technique = m_spot_FX->GetTechniqueByName("PhongTech");
+	mh_Technique = m_spot_FX->GetTechniqueByName("SpotlightTech");
 
 	//	set world view proj matrix
 	mh_WVP = m_spot_FX->GetParameterByName(0, "gWVP");

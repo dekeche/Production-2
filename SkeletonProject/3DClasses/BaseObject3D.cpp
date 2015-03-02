@@ -20,16 +20,16 @@ BaseObject3D::BaseObject3D(void)
 BaseObject3D::~BaseObject3D(void)
 {
 	ReleaseCOM(m_MeshObject);
-
-
-	//	destroy pointer to BaseMaterial
-	delete m_Material;
 }
 
 //-----------------------------------------------------------------------------
 void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 {
 	LoadObject(gd3dDevice);
+	int mVerts = m_MeshObject->GetNumVertices();
+	int mTris = m_MeshObject->GetNumFaces();
+	GfxStats::GetInstance()->addVertices(mVerts);
+	GfxStats::GetInstance()->addTriangles(mTris);
 }
 
 //-----------------------------------------------------------------------------
