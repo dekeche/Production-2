@@ -69,6 +69,11 @@ private:
 	//	Variables added to "cycle" through different objects
 	int m_currentobject_index;
 	bool m_key_O_down = false;
+	bool m_key_W_down = false;
+	bool m_key_T_down = false;
+	bool m_key_S_down = false;
+	bool m_key_D_down = false;
+	bool m_key_E_down = false;
 
 
 
@@ -77,7 +82,7 @@ private:
 					/*	0 - None(?)
 						1 - Phong
 					*/
-	int m_current_shader_index = 2;
+	int m_current_shader_index = 0;
 
 
 	//	Variables added to toggle various features

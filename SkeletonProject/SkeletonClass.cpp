@@ -190,17 +190,37 @@ void SkeletonClass::updateScene(float dt)
 	gDInput->poll();
 
 	// Check input.
-	if (gDInput->keyDown(DIK_W))
+	if (gDInput->keyDown(DIK_W) && !m_key_W_down)
+	{
 		i_Solid_frame++;
+		m_key_W_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_W))
+		m_key_W_down = false;
 
-	if (gDInput->keyDown(DIK_T))
+	if (gDInput->keyDown(DIK_T) && !m_key_T_down)
+	{
 		i_texture_on++;
+		m_key_T_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_T))
+		m_key_T_down = false;
 
-	if (gDInput->keyDown(DIK_S))
+	if (gDInput->keyDown(DIK_S) && !m_key_S_down)
+	{
 		i_spec_on++;
+		m_key_S_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_S))
+		m_key_S_down = false;
 
-	if (gDInput->keyDown(DIK_D))
+	if (gDInput->keyDown(DIK_D) && !m_key_D_down)
+	{
 		i_diff_on++;
+		m_key_D_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_D))
+		m_key_D_down = false;
 
 	//	Check for "O" input for changing currentobject_index
 	if (gDInput->keyDown(DIK_O) && !m_key_O_down)
@@ -208,6 +228,13 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_O))
 		m_key_O_down = false;
 
+	if (gDInput->keyDown(DIK_E) && !m_key_E_down)
+	{
+		m_current_shader_index++;
+		m_key_E_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_E))
+		m_key_E_down = false;
 
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY += gDInput->mouseDY() / 100.0f;
@@ -258,6 +285,10 @@ void SkeletonClass::drawScene()
 		case 2: // Gouraud
 			m_current_effect = m_spot_FX;
 			obtainSpotHandles();
+			break;
+		default:
+			m_current_shader_index = 0;
+			m_current_effect = nullptr;
 			break;
 	}
 	m_Objects[m_currentobject_index]->setEffect(m_current_effect);
