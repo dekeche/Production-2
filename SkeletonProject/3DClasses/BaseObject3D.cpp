@@ -23,7 +23,7 @@ BaseObject3D::~BaseObject3D(void)
 
 
 	//	destroy pointer to BaseMaterial
-	delete m_ObjectMaterial;
+	delete m_Material;
 }
 
 //-----------------------------------------------------------------------------

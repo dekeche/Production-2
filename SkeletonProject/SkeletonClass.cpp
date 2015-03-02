@@ -24,6 +24,8 @@
 #include "Cone.h"
 #include "Sphere.h"
 #include "Cylinder.h"
+#include "Teapot.h"
+#include "Torus.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -73,14 +75,27 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	BaseObject3D* temp;
 
 	temp = new Cylinder();
+	temp->Create(gd3dDevice);
 	temp->setMaterial(&basic);
 	m_Objects.push_back(temp);
 
 	temp = new Sphere();
+	temp->Create(gd3dDevice);
 	temp->setMaterial(&basic);
 	m_Objects.push_back(temp);
 
 	temp = new Cone();
+	temp->Create(gd3dDevice);
+	temp->setMaterial(&basic);
+	m_Objects.push_back(temp);
+
+	temp = new Torus();
+	temp->Create(gd3dDevice);
+	temp->setMaterial(&basic);
+	m_Objects.push_back(temp);
+
+	temp = new Teapot();
+	temp->Create(gd3dDevice);
 	temp->setMaterial(&basic);
 	m_Objects.push_back(temp);
 
@@ -344,7 +359,7 @@ void SkeletonClass::ChangeObject(void)
 	m_currentobject_index++;
 
 	//	Check if index is over current amount (3)
-	if (m_currentobject_index >= 3)
+	if (m_currentobject_index >= 5)
 		m_currentobject_index = 0;
 
 	//	Set m_mousedown to true so that we only iterate once per mouse click
@@ -380,7 +395,7 @@ void SkeletonClass::obtainPhongHandles()
 		//	set world view proj matrix
 	mh_WVP						= m_phong_FX->GetParameterByName(0, "gWVP");
 		//	set world inverse transpose
-	mh_WorldInverseTranspose	= m_phong_FX->GetParameterByName(0, "gWorldInvTrans");
+	mh_WorldInverseTranspose	= m_phong_FX->GetParameterByName(0, "gWorldInverseTranspose");
 		//	eye/camera position
 	mh_eyePos					= m_phong_FX->GetParameterByName(0, "gEyePosW");
 		//	world matrix

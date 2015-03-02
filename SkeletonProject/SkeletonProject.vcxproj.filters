@@ -31,6 +31,12 @@
     <ClCompile Include="BaseMaterial.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Torus.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Teapot.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h">
@@ -64,6 +70,12 @@
       <Filter>Headers\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Torus.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Teapot.h">
       <Filter>Headers\Shapes</Filter>
     </ClInclude>
   </ItemGroup>

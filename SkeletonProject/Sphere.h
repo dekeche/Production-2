@@ -1,5 +1,5 @@
 //=============================================================================
-//                             Cone
+//                             Sphere
 //
 // Writen by Jesse McKinley, 2015
 // EGP 300-101, Graphics Programming II  - skeleton project
