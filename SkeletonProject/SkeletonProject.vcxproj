@@ -60,7 +60,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d9.lib;d3dx9d.lib;dxguid.lib;DxErr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -76,7 +76,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
@@ -113,6 +113,7 @@
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
+    <ClInclude Include="PointEffect.h" />
     <ClInclude Include="SkeletonClass.h" />
     <ClInclude Include="Sphere.h" />
   </ItemGroup>
@@ -123,6 +124,18 @@
     <None Include="spotlight.fx">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Gouraud.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

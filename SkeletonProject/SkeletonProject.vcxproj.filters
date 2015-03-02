@@ -66,6 +66,9 @@
     <ClInclude Include="Sphere.h">
       <Filter>Headers\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="PointEffect.h">
+      <Filter>Headers\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -80,9 +83,19 @@
     <Filter Include="Sources\Shapes">
       <UniqueIdentifier>{c732111d-334f-47f1-8bd0-976f94cee9cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Effects">
+      <UniqueIdentifier>{bd680598-d448-4e73-9402-0d837358edea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="spotlight.fx" />
-    <FxCompile Include="pointlight.fx" />
+    <None Include="Gouraud.fx">
+      <Filter>Headers\Effects</Filter>
+    </None>
+    <None Include="pointlight.fx">
+      <Filter>Headers\Effects</Filter>
+    </None>
+    <None Include="spotlight.fx">
+      <Filter>Headers\Effects</Filter>
+    </None>
   </ItemGroup>
 </Project>

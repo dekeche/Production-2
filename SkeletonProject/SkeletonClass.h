@@ -52,6 +52,8 @@ private:
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
 
+	ID3DXEffect* mEffect;
+
     std::vector<BaseObject3D*>      m_Objects;
 
 	//	Variables added to "cycle" through different objects

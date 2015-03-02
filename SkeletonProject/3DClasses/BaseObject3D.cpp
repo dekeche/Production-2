@@ -13,6 +13,15 @@
 BaseObject3D::BaseObject3D(void)
 {
     D3DXMatrixIdentity(&m_World);
+	m_Material = 0;
+}
+
+//=============================================================================
+BaseObject3D::BaseObject3D(BaseMaterial* mat)
+{
+	D3DXMatrixIdentity(&m_World);
+
+	m_Material = mat;
 }
 
 //-----------------------------------------------------------------------------
@@ -31,11 +40,16 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
     D3DXMATRIX& view, D3DXMATRIX& projection )
 {
-	// Set matrices and model relevant render date
 	HR(gd3dDevice->SetTransform(D3DTS_WORLD, &m_World));
 	HR(gd3dDevice->SetTransform(D3DTS_VIEW, &view));
 	HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &projection));
 
+	// Set matrices and model relevant render date
+	if (m_Material != 0)
+	{
+		m_Material->Render(m_World, m_World*view*projection);
+	}
 
 	HR(m_MeshObject->DrawSubset(0));
+
 }
