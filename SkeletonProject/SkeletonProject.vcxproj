@@ -125,7 +125,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="phong.fx" />
+    <None Include="phong.fx">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

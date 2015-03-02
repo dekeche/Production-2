@@ -16,14 +16,6 @@ BaseObject3D::BaseObject3D(void)
 	m_Material = 0;
 }
 
-//=============================================================================
-BaseObject3D::BaseObject3D(BaseMaterial* mat)
-{
-	D3DXMatrixIdentity(&m_World);
-
-	m_Material = mat;
-}
-
 //-----------------------------------------------------------------------------
 BaseObject3D::~BaseObject3D(void)
 {

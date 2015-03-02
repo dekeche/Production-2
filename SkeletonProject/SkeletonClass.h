@@ -61,9 +61,6 @@ private:
 	D3DXCOLOR m_Light_specular;
 
 
-
-	ID3DXEffect* mEffect;
-
     std::vector<BaseObject3D*>      m_Objects;
 
 	//	Variables added to "cycle" through different objects
@@ -93,6 +90,7 @@ private:
 	//	Shaders
 	ID3DXEffect* m_current_effect;
 	ID3DXEffect* m_phong_FX;
+	ID3DXEffect* m_spot_FX;
 		//	HANDLES
 	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
 					//	For BEST simplicity, have the technique be called "Technique" unless stated otherwise
@@ -110,7 +108,7 @@ private:
 	D3DXHANDLE mh_World;					//	Matrix of the WORLD.
 		//	Function for SHADER
 	void buildPhongFX();
-					
+	void buildSpotFX();
 
 
 };
