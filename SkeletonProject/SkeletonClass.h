@@ -91,6 +91,7 @@ private:
 	bool i_diff_on = true;
 
 	//	Shaders
+	ID3DXEffect* m_current_effect;
 	ID3DXEffect* m_phong_FX;
 		//	HANDLES
 	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
