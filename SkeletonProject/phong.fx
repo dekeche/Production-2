@@ -46,20 +46,20 @@ struct PhongOutputVS
 	float4 posH		: POSITION0;
 	float3 normalW	: TEXCOORD0;
 	float3 posW : TEXCOORD1;
-	float2 tex0 : TEXCOORD0;
+	float2 tex0 : TEXCOORD2;
 };
 
-sampler TexS = sample_state
+sampler TexS = sampler_state
 {
 	Texture = <gTex>;
 	MinFilter = LINEAR;
-	MaxFilter = LINEAR;
+	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-}
+};
 
 //	Compute data about/from the vertex
 //	Returns vertex structurep containing data on vertex we modified
-PhongOutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 : TEXCOORD0)
+PhongOutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 : TEXCOORD2)
 {
 	//	Initialize our return value
 	PhongOutputVS outVS = (PhongOutputVS)0;
@@ -90,7 +90,7 @@ PhongOutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 
 
 
 //	Returns a float4 that is the COLOR.
-float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1, float2 tex0 : TEXCOORD0) : COLOR
+float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1, float2 tex0 : TEXCOORD2) : COLOR
 {
 	//	The pixel shader will compute the Specular equation to get the light/color
 	//	that will make it's way to the camera eye.

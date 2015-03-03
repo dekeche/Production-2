@@ -34,13 +34,13 @@ struct OutputVS
 	float2 tex0 : TEXCOORD0;
 };
 
-sampler TexS = sample_state
+sampler TexS = sampler_state
 {
 	Texture = <gTex>;
 	MinFilter = LINEAR;
-	MaxFilter = LINEAR;
+	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-}
+};
 
 OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0: TEXCOORD0)
 {
