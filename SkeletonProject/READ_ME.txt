@@ -1,21 +1,33 @@
-Jesse Mckinley
-Abner Herrera
-Assignment 2: Skeleton Project
+Assignment: Assignment 3 - Material Rendering
+Project name: SkeletonProject
+Authors: Jesse Mckinley & Abner Herrera
 
-The main purpose of this project is to experiment with vertex and index buffers, as well as 
-introduce us to 3D programming.
-
-
-The project creates 3 different shapes - cyclinder, cone, and a sphere - that you can view
-and rotate around with the mouse. Clicking the left mouse button will change the current
-object you are viewing. 
-
-
-Move Mouse X - Rotates object on X/Y axis
-Move Mouse Y - Increases/Decreases angle on Z axis
-Left Mouse Click - Change current object to view
+The following inputs are implemented:
+	- "E" key changes the current shader
+	- "W" key Toggles between Solid render & Wireframe render
+	- "O" key changes the Object to view
+	- "S" key toggles Specular Light on/off
+	- "D" key toggles Diffuse Light on/off
+	- "T" key toggles textures on/off
+	- Mouse movement: 
+		* Mouse Wheel zooms in/out
+		* Moving mouse horizontally & vertically rotates camera accordingly
 
 
-Observation: Each individual triangle appears to be pushed outward towards the camera from the object
-surface, even though the object as a whole appears well-rounded and normal. This phenomena is reversed
-if the indicies are listed in reverse order - triangles appear to be pushed away from the camera.
+Notes:
+* All shapes are made with a RED material.
+
+* All Shaders use a Point Light to recieve light from.
+
+* Shader examples in the order they are switched on:
+	- No Shading
+	- Phong Shading
+	- Gouraud Shading
+
+* World Lighting Components:
+	- Diffuse is a 	Red color
+	- Ambient is a 	Red color
+	- Specular is a White color
+
+
+Known bugs:
