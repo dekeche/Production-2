@@ -53,8 +53,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
-	IDirect3DTexture9* texture;
-	HR(D3DXCreateTextureFromFile(gd3dDevice, "tTest.jpg", &texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, "tTest.jpg", &mp_texture));
 
 	//	Initialize camera
 	mCameraRadius    = 10.0f;
@@ -75,7 +74,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mConeMaterial = new BaseMaterial();
 
 	mConeMaterial->ConnectToEffect(m_spot_FX);
-	mConeMaterial->AddTexture(texture);
+	mConeMaterial->AddTexture(mp_texture);
 	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 
     // repleace or add to the following object creation
@@ -144,6 +143,7 @@ SkeletonClass::~SkeletonClass()
 	//	Destroy effects
 	ReleaseCOM(m_phong_FX);
 	ReleaseCOM(m_spot_FX);
+	ReleaseCOM(mp_texture);
 
 	DestroyAllVertexDeclarations();
 }

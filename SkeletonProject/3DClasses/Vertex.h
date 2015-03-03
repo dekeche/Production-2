@@ -41,19 +41,34 @@ struct VertexPN
 {
 	VertexPN()
 	:pos(0.0f, 0.0f, 0.0f),
-	normal(0.0f, 0.0f, 0.0f),
-	tex0(0.0f,0.0f){}
+	normal(0.0f, 0.0f, 0.0f){}
 	VertexPN(float x, float y, float z,
+		float nx, float ny, float nz) :pos(x, y, z), normal(nx, ny, nz){}
+	VertexPN(const D3DXVECTOR3& v, const D3DXVECTOR3& n)
+		:pos(v), normal(n){}
+
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 normal;
+	static IDirect3DVertexDeclaration9* Decl;
+};
+
+//===============================================================
+struct VertexPNT
+{
+	VertexPNT()
+	:pos(0.0f, 0.0f, 0.0f),
+	normal(0.0f, 0.0f, 0.0f),
+	tex0(0.0f, 0.0f){}
+	VertexPNT(float x, float y, float z,
 		float nx, float ny, float nz,
-		float v, float u) :pos(x, y, z), normal(nx, ny, nz), tex0(v,u){}
-	VertexPN(const D3DXVECTOR3& v, const D3DXVECTOR3& n, const D3DXVECTOR2& vu)
-		:pos(v), normal(n),tex0(vu){}
+		float v, float u) :pos(x, y, z), normal(nx, ny, nz), tex0(v, u){}
+	VertexPNT(const D3DXVECTOR3& v, const D3DXVECTOR3& n, const D3DXVECTOR2& vu)
+		:pos(v), normal(n), tex0(vu){}
 
 	D3DXVECTOR3 pos;
 	D3DXVECTOR3 normal;
 	D3DXVECTOR2 tex0;
 	static IDirect3DVertexDeclaration9* Decl;
 };
-
 //=============================================================================
 #endif // VERTEX_H
