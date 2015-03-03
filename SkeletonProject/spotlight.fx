@@ -95,7 +95,15 @@ OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 t
 
 float4 SpotlightPS(float4 c : COLOR0, float2 tex0: TEXCOORD0) : COLOR
 {
-    return c;
+	if (gTextureOn)
+	{
+		float3 texColor = tex2D(TexS, tex0).rgb;
+		return float4(texColor, c.a);
+	}
+	else
+	{
+		return c;
+	}
 }
 
 technique SpotlightTech

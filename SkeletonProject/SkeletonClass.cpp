@@ -54,7 +54,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	}
 
 	IDirect3DTexture9* texture;
-	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, "tTest.jpg", &texture));
 
 	//	Initialize camera
 	mCameraRadius    = 10.0f;
@@ -210,7 +210,7 @@ void SkeletonClass::updateScene(float dt)
 
 	if (gDInput->keyDown(DIK_T) && !m_key_T_down)
 	{
-		i_texture_on++;
+		i_texture_on = !i_texture_on;
 		m_key_T_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_T))
@@ -218,7 +218,7 @@ void SkeletonClass::updateScene(float dt)
 
 	if (gDInput->keyDown(DIK_S) && !m_key_S_down)
 	{
-		i_spec_on++;
+		i_spec_on = !i_spec_on;
 		m_key_S_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_S))
@@ -226,7 +226,7 @@ void SkeletonClass::updateScene(float dt)
 
 	if (gDInput->keyDown(DIK_D) && !m_key_D_down)
 	{
-		i_diff_on++;
+		i_diff_on = !i_diff_on;
 		m_key_D_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_D))
