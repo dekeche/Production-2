@@ -63,6 +63,9 @@ private:
 	D3DXCOLOR m_Light_diffuse;
 	D3DXCOLOR m_Light_specular;
 
+	//	Power of the Spotlight
+	float m_spot_power;
+
 
     std::vector<BaseObject3D*>      m_Objects;
 
