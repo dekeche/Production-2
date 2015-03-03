@@ -122,6 +122,8 @@ private:
 	D3DXHANDLE mh_attenuation;				//	attenuation of the LIGHT
 
 	D3DXHANDLE mh_spotPower;				//	power of a SPOTLIGHT
+
+	D3DXHANDLE mh_textureOn;
 		
 	
 		//	Function for SHADER
@@ -130,7 +132,7 @@ private:
 	void buildSpotFX();
 	void obtainSpotHandles();
 
-
+	IDirect3DTexture9* mp_texture;
 };
 //=============================================================================
 #endif // _SKELETON_CLASS_H_

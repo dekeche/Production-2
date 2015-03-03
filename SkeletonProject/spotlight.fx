@@ -23,14 +23,26 @@ uniform extern float3 gLightDirW;
 uniform extern float3 gAttenuation012; 
 uniform extern float  gSpotPower;
 
+uniform extern bool gTextureOn;
+uniform extern texture gTex;
+
 struct OutputVS
 {
     float4 posH  : POSITION0;
 	float4 color : COLOR0;
 	float3 posW : TEXCOORD1;
+	float2 tex0 : TEXCOORD0;
 };
 
-OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
+sampler TexS = sample_state
+{
+	Texture = <gTex>;
+	MinFilter = LINEAR;
+	MaxFilter = LINEAR;
+	MipFilter = LINEAR;
+}
+
+OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0: TEXCOORD0)
 {
     // Zero out our output.
 	OutputVS outVS = (OutputVS)0;
@@ -73,12 +85,15 @@ OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
 	
 	// Transform to homogeneous clip space.
 	outVS.posH = mul(float4(posL, 1.0f), gWVP);
+
+	if (gTextureOn)
+		outVS.tex0 = tex0;
 	
 	// Done--return the output.
     return outVS;
 }
 
-float4 SpotlightPS(float4 c : COLOR0) : COLOR
+float4 SpotlightPS(float4 c : COLOR0, float2 tex0: TEXCOORD0) : COLOR
 {
     return c;
 }

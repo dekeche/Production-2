@@ -12,6 +12,7 @@
 BaseMaterial::BaseMaterial(void)
 {
     m_Effect = NULL;
+	mp_texture = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -35,8 +36,25 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 		m_DiffuseHandel = m_Effect->GetParameterByName(0, "gDiffuseMtrl");
 		m_SpecHandel = m_Effect->GetParameterByName(0, "gSpecMtrl");
 		m_SpecPowerHandel = m_Effect->GetParameterByName(0, "gSpecPower");
+		m_texture = m_Effect->GetParameterByName(0, "gTex");
+		if (mp_texture != nullptr)
+		{
+			HR(m_Effect->SetTexture(m_texture, mp_texture));
+		}
 	}
 }
+
+void BaseMaterial::AddTexture(IDirect3DTexture9* tex)
+{ 
+	mp_texture = tex; 
+	if (mp_texture != nullptr)
+	{
+		if (m_Effect != nullptr)
+		{
+			HR(m_Effect->SetTexture(m_texture, mp_texture));
+		}
+	}
+};
 void BaseMaterial::setMat(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, float specPower)
 {
 	m_Ambient = ambient;

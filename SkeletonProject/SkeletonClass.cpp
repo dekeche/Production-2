@@ -53,7 +53,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
-
+	IDirect3DTexture9* texture;
+	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &texture));
 
 	//	Initialize camera
 	mCameraRadius    = 10.0f;
@@ -72,6 +73,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mConeMaterial = new BaseMaterial();
 
 	mConeMaterial->ConnectToEffect(m_spot_FX);
+	mConeMaterial->AddTexture(texture);
 	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 
     // repleace or add to the following object creation
@@ -308,6 +310,7 @@ void SkeletonClass::drawScene()
 	m_Objects[m_currentobject_index]->setEffect(m_current_effect);
 	if (m_current_effect != nullptr)
 	{
+		HR(m_current_effect->SetBool(mh_textureOn, i_texture_on));
 		//	set technique
 		HR(m_current_effect->SetTechnique(mh_Technique));
 		//	set world view proj matrix
@@ -476,6 +479,7 @@ void SkeletonClass::obtainPhongHandles()
 		//	attuenuation of light
 	mh_attenuation				= m_phong_FX->GetParameterByName(0, "gAttenuation012");
 
+	mh_textureOn = m_phong_FX->GetParameterByName(0, "gTextureOn");
 
 }
 
@@ -533,5 +537,5 @@ void SkeletonClass::obtainSpotHandles()
 	//	power of the spotlight
 	mh_spotPower = m_spot_FX->GetParameterByName(0, "gSpotPower");
 
-
+	mh_textureOn = m_spot_FX->GetParameterByName(0, "gTextureOn");
 }

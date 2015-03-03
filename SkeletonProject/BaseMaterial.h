@@ -14,6 +14,7 @@ class BaseMaterial
 {
 protected:
     ID3DXEffect*        m_Effect;               // the shader associate effect file
+	IDirect3DTexture9* mp_texture;
 
 	D3DXCOLOR m_Ambient;
 	D3DXCOLOR m_Diffuse;
@@ -30,6 +31,7 @@ protected:
 	D3DXHANDLE          m_DiffuseHandel;
 	D3DXHANDLE          m_SpecHandel;
 	D3DXHANDLE          m_SpecPowerHandel;
+	D3DXHANDLE			m_texture;
 
 
 
@@ -38,6 +40,7 @@ public:
     virtual ~BaseMaterial(void);
 
     void ConnectToEffect( ID3DXEffect* effect );
+	void AddTexture(IDirect3DTexture9* tex);
 	void setMat(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, float specPower );
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
 };
