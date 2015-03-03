@@ -62,9 +62,15 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 	m_Light_vector_W = D3DXVECTOR3(1.0, 1.0f, 1.0f);
-	m_Light_diffuse = RED;
+		//	Red
+	m_Light_diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, m_Light_Diffuse_A);
 	m_Light_ambient = RED * 0.4f;
-	m_Light_specular = WHITE;
+		//	White
+	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_Light_Specular_A);
+
+	//	set original Specular & Diffuse
+	m_Light_OriginalSpec = m_Light_specular;
+	m_Light_OriginalDiff = m_Light_diffuse;
 
 	m_spot_power = 16.0f;
 
@@ -105,9 +111,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	temp->Create(gd3dDevice);
 	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
-
-	//	Initialize World components
-		//	Light
 
 
 	//	Initialize the World Matrix (centered in origin, ie identity matrix)
@@ -261,6 +264,15 @@ void SkeletonClass::updateScene(float dt)
 
 	if (fabsf(mCameraRotationX) < 0.0f)
 		mCameraRotationX = 2.0f * D3DX_PI;
+
+
+	//	Update Specular & Diffuse Alphas
+	if (i_diff_on)	m_Light_diffuse = m_Light_OriginalDiff;
+	else			m_Light_diffuse = D3DXCOLOR(0, 0, 0, 0);
+	if (i_spec_on)	m_Light_specular = m_Light_OriginalSpec;
+	else			m_Light_specular = D3DXCOLOR(0, 0, 0, 0);
+
+
 
 	// The camera position/orientation relative to world space can 
 	// change every frame based on input, so we need to rebuild the

@@ -66,6 +66,12 @@ private:
 	//	Power of the Spotlight
 	float m_spot_power;
 
+	//	variables for toggling Specular & Diffuse Light components
+	float m_Light_Specular_A = 1.0f;
+	D3DXCOLOR m_Light_OriginalSpec;
+	float m_Light_Diffuse_A = 1.0f;
+	D3DXCOLOR m_Light_OriginalDiff;
+
 
     std::vector<BaseObject3D*>      m_Objects;
 
