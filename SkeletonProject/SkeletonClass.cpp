@@ -114,6 +114,12 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//	initialize object index & key down
 	m_currentobject_index = 0;
 	m_key_O_down = false;
+	m_key_W_down = false;
+	m_key_T_down = false;
+	m_key_S_down = false;
+	m_key_D_down = false;
+	m_key_E_down = false;
+	m_current_effect = nullptr;
 
 
 	onResetDevice();
@@ -379,12 +385,21 @@ void SkeletonClass::buildViewMtx()
 		//xyRadius = -xyRadius;
 		//mCameraRotationX = 2;
 	}
-
-
 	D3DXVECTOR3 pos(x, y, z);
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
+
+	if (m_current_effect != nullptr)
+	{
+		HR(m_current_effect->SetValue(mh_eyePos, &pos, sizeof(D3DXVECTOR3)));
+
+		// Spotlight position is the same as the camera position.
+		HR(m_current_effect->SetValue(mh_LightPosW, &pos, sizeof(D3DXVECTOR3)));
+		D3DXVECTOR3 lightDir = target - pos;
+		D3DXVec3Normalize(&lightDir, &lightDir);
+		HR(m_current_effect->SetValue(mh_LightDirectW, &lightDir, sizeof(D3DXVECTOR3)));
+	}
 }
 
 void SkeletonClass::buildProjMtx()
@@ -481,11 +496,11 @@ void SkeletonClass::buildSpotFX()
 	//	Obtain the handles
 	obtainSpotHandles();
 
-	D3DXVECTOR3 lightPos = D3DXVECTOR3(-10.0, -10.0f, -10.0f);
+	D3DXVECTOR3 attenuation012 = D3DXVECTOR3(1.0f,0.0f,0.0f);
 	HR(m_spot_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
 	HR(m_spot_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
 	HR(m_spot_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-	//HR(m_spot_FX->SetValue(mh))
+	HR(m_spot_FX->SetValue(mh_attenuation, &attenuation012, sizeof(D3DXVECTOR3)));
 }
 void SkeletonClass::obtainSpotHandles()
 {
