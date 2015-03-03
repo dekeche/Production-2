@@ -53,6 +53,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
+	InitAllVertexDeclarations();
+
 	HR(D3DXCreateTextureFromFile(gd3dDevice, "tTest.jpg", &mp_texture));
 
 	//	Initialize camera
@@ -127,7 +129,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	onResetDevice();
 
-	InitAllVertexDeclarations();
 }
 
 SkeletonClass::~SkeletonClass()

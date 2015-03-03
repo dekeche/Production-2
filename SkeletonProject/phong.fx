@@ -94,8 +94,6 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1, float2 tex0 :
 {
 	//	The pixel shader will compute the Specular equation to get the light/color
 	//	that will make it's way to the camera eye.
-
-
 	//	Interpolated normals can become unnormal, so renormalize again just to be sure
 	normalW = normalize(normalW);
 
@@ -129,7 +127,17 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1, float2 tex0 :
 
 
 		//	return color
+
+	if (gTextureOn)
+	{
+		float3 texColor = tex2D(TexS, tex0).rgb;
+			float3 diff = all_together.rgb*texColor;
+			return float4(diff, all_together.a);
+	}
+	else
+	{
 		return all_together;
+	}
 }
 
 technique PhongTech

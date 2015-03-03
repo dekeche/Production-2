@@ -26,6 +26,33 @@ BaseObject3D::~BaseObject3D(void)
 void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 {
 	LoadObject(gd3dDevice);
+
+	ID3DXMesh* clone = 0;
+
+	D3DVERTEXELEMENT9 elements[64];
+	UINT numElements = 0;
+	VertexPNT::Decl->GetDeclaration(elements, &numElements);
+	HR(m_MeshObject->CloneMesh(D3DXMESH_SYSTEMMEM,elements,gd3dDevice, &clone));
+
+	ReleaseCOM(m_MeshObject);
+
+	VertexPNT* vertices = 0;
+	HR(clone->LockVertexBuffer(0, (void**)&vertices));
+
+	for (UINT i = 0; i < clone->GetNumVertices(); i++)
+	{
+		D3DXVECTOR3 p = vertices[i].pos;
+
+		vertices[i].tex0.x = p.x;
+		vertices[i].tex0.y = p.y;
+	}
+
+	HR(clone->UnlockVertexBuffer());
+
+	HR(clone->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, elements, gd3dDevice, &m_MeshObject));
+
+	ReleaseCOM(clone);
+
 	int mVerts = m_MeshObject->GetNumVertices();
 	int mTris = m_MeshObject->GetNumFaces();
 	GfxStats::GetInstance()->addVertices(mVerts);

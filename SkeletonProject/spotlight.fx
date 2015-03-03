@@ -98,7 +98,8 @@ float4 SpotlightPS(float4 c : COLOR0, float2 tex0: TEXCOORD0) : COLOR
 	if (gTextureOn)
 	{
 		float3 texColor = tex2D(TexS, tex0).rgb;
-		return float4(texColor, c.a);
+			float3 diffuse = c.rgb*texColor;
+		return float4(diffuse, c.a);
 	}
 	else
 	{
