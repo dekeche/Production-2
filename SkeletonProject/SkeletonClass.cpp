@@ -55,7 +55,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	InitAllVertexDeclarations();
 
-	HR(D3DXCreateTextureFromFile(gd3dDevice, "tTest.jpg", &mp_texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &mp_texture));
 
 	//	Initialize camera
 	mCameraRadius    = 10.0f;
