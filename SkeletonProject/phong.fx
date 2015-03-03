@@ -12,12 +12,12 @@ uniform extern float3   gEyePosW;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gDiffuseMtrl;
 uniform extern float4 gSpecMtrl;
+uniform extern float  gSpecPower;
 
 //	Components of the Light color
 uniform extern float4 gAmbientLight;
 uniform extern float4 gDiffuseLight;
 uniform extern float4 gSpecLight;
-uniform extern float  gSpecPower;
 
 // *********** For General Lighting 
 
@@ -41,7 +41,7 @@ struct PhongOutputVS
 {
 	float4 posH		: POSITION0;
 	float3 normalW	: TEXCOORD0;
-	float posW : TEXCOORD1;
+	float3 posW : TEXCOORD1;
 };
 
 //	Compute data about/from the vertex
@@ -94,12 +94,13 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float posW : TEXCOORD1) : COLOR
 	float s = max(dot(gLightVecW, normalW), 0.0f);
 
 	//	Compute the ambient, diffuse, and specular terms respecitively.
-	float3 diffuse = s*(gDiffuseMtrl*gDiffuseLight).rgb;
+	float3 spec = t*(gSpecMtrl*gSpecLight).rgb;
+		float3 diffuse = s*(gDiffuseMtrl*gDiffuseLight).rgb;
 		float3 ambient = gAmbientMtrl*gAmbientLight;
-		float3 spec = t*(gSpecMtrl*gSpecLight).rgb;
-
+		float4 all_together;
 		//	Sum all the components together and copy over the diffuse alpha
-		float4 all_together = (ambient + diffuse + spec, gDiffuseMtrl.a);
+
+	all_together = float4(  ambient + spec + diffuse, gDiffuseMtrl.a);
 
 
 		//	return color

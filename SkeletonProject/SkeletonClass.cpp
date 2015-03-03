@@ -61,6 +61,10 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraRotationX = 0;// 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
+	m_Light_vector_W = D3DXVECTOR3(1.0, 1.0f, 1.0f);	//	shine towards negative Z direction
+	m_Light_diffuse = RED;
+	m_Light_ambient = WHITE * 0.4f;
+	m_Light_specular = BLUE;
 
 	buildSpotFX();
 	buildPhongFX();
@@ -68,7 +72,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mConeMaterial = new BaseMaterial();
 
 	mConeMaterial->ConnectToEffect(m_spot_FX);
-	mConeMaterial->setMat(RED, RED, WHITE, 8.0f);
+	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
@@ -101,10 +105,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	//	Initialize World components
 		//	Light
-	m_Light_vector_W = D3DXVECTOR3(0.0, 0.0f, -1.0f);	//	shine towards negative Z direction
-	m_Light_diffuse = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
-	m_Light_ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
-	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 
 	//	Initialize the World Matrix (centered in origin, ie identity matrix)
@@ -192,7 +192,7 @@ void SkeletonClass::updateScene(float dt)
 	// Check input.
 	if (gDInput->keyDown(DIK_W) && !m_key_W_down)
 	{
-		//i_Solid_frame = !i_Solid_frame;
+		i_Solid_frame = !i_Solid_frame;
 		m_key_W_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_W))
@@ -427,11 +427,10 @@ void SkeletonClass::buildPhongFX()
 	//	Obtain the handles
 	obtainPhongHandles();
 
-	D3DXCOLOR temp = 0.4f*BLACK;
-	HR(m_phong_FX->SetValue(mh_ambientLight, &temp, sizeof(D3DXCOLOR)));
-	HR(m_phong_FX->SetValue(mh_diffuseLight, &BLACK, sizeof(D3DXCOLOR)));
-	HR(m_phong_FX->SetValue(mh_specularLight, &BLACK, sizeof(D3DXCOLOR)));
-
+	HR(m_phong_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
+	HR(m_phong_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
+	HR(m_phong_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
+	HR(m_phong_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
 }
 
 void SkeletonClass::obtainPhongHandles()
@@ -482,10 +481,11 @@ void SkeletonClass::buildSpotFX()
 	//	Obtain the handles
 	obtainSpotHandles();
 
-	D3DXCOLOR temp = 0.4f*BLACK;
-	HR(m_spot_FX->SetValue(mh_ambientLight, &temp, sizeof(D3DXCOLOR)));
-	HR(m_spot_FX->SetValue(mh_diffuseLight, &BLACK, sizeof(D3DXCOLOR)));
-	HR(m_spot_FX->SetValue(mh_specularLight, &BLACK, sizeof(D3DXCOLOR)));
+	D3DXVECTOR3 lightPos = D3DXVECTOR3(-10.0, -10.0f, -10.0f);
+	HR(m_spot_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
+	HR(m_spot_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
+	HR(m_spot_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
+	//HR(m_spot_FX->SetValue(mh))
 }
 void SkeletonClass::obtainSpotHandles()
 {
@@ -506,7 +506,7 @@ void SkeletonClass::obtainSpotHandles()
 	mh_specularLight = m_spot_FX->GetParameterByName(0, "gSpecLight");
 
 	//	Light as a Vector
-	mh_LightVecW = m_spot_FX->GetParameterByName(0, "gLightVecW");
+	//mh_LightVecW = m_spot_FX->GetParameterByName(0, "gLightVecW");
 
 	//	Light as a position & direction
 	mh_LightPosW = m_spot_FX->GetParameterByName(0, "gLightPosW");

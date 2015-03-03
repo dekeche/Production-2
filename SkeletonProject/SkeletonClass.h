@@ -58,7 +58,7 @@ private:
 
 
 	//	World Light variables
-	D3DXVECTOR3 m_Light_vector_W;		//	Light Vector in the World
+	D3DXVECTOR3 m_Light_vector_W;		//	Light Vector in the World3
 	D3DXCOLOR m_Light_ambient;
 	D3DXCOLOR m_Light_diffuse;
 	D3DXCOLOR m_Light_specular;

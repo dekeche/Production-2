@@ -26,7 +26,8 @@ uniform extern float  gSpotPower;
 struct OutputVS
 {
     float4 posH  : POSITION0;
-    float4 color : COLOR0;
+	float4 color : COLOR0;
+	float3 posW : TEXCOORD1;
 };
 
 OutputVS SpotlightVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
