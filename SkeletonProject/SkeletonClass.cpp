@@ -54,6 +54,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	}
 
 	InitAllVertexDeclarations();
+	//	Load Texture
 
 	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &mp_texture));
 
