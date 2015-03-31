@@ -100,5 +100,6 @@
     <None Include="pointlight.fx" />
     <None Include="spotlight.fx" />
     <None Include="phong.fx" />
+    <None Include="Assignment4.fx" />
   </ItemGroup>
 </Project>

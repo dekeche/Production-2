@@ -125,9 +125,19 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_key_O_down = false;
 	m_key_W_down = false;
 	m_key_T_down = false;
+	m_key_R_down = false;
+	m_key_N_down = false;
+	m_key_min_down = false;
+	m_key_pls_down = false;
+	m_key_A_down = false;
 	m_key_S_down = false;
-	m_key_D_down = false;
-	m_key_E_down = false;
+	m_key_1_down = false;
+	m_key_2_down = false;
+	m_key_3_down = false;
+	m_key_4_down = false;
+	m_key_5_down = false;
+	m_key_6_down = false;
+	m_key_7_down = false;
 	m_current_effect = nullptr;
 
 
@@ -358,11 +368,6 @@ void SkeletonClass::updateScene(float dt)
 		mCameraRotationX = 2.0f * D3DX_PI;
 
 
-	//	Update Specular & Diffuse Alphas
-	if (i_diff_on)	m_Light_diffuse = m_Light_OriginalDiff;
-	else			m_Light_diffuse = D3DXCOLOR(0, 0, 0, 0);
-	if (i_spec_on)	m_Light_specular = m_Light_OriginalSpec;
-	else			m_Light_specular = D3DXCOLOR(0, 0, 0, 0);
 
 
 
@@ -395,24 +400,6 @@ void SkeletonClass::drawScene()
 	ID3DXEffect* current;
 	//	Setup the rendering EFFECT
 		//	iterate between various shaders
-	switch (m_current_shader_index)
-	{
-		case 0:	//	NONE
-			m_current_effect = nullptr;
-			break;
-		case 1:	//	PHONG
-			m_current_effect = m_phong_FX;
-			obtainPhongHandles();
-			break;
-		case 2: // Spot
-			m_current_effect = m_spot_FX;
-			obtainSpotHandles();
-			break;
-		default:
-			m_current_shader_index = 0;
-			m_current_effect = nullptr;
-			break;
-	}
 	m_Objects[m_currentobject_index]->setEffect(m_current_effect);
 	if (m_current_effect != nullptr)
 	{

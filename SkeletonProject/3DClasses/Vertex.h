@@ -71,21 +71,28 @@ struct VertexPNT
 	static IDirect3DVertexDeclaration9* Decl;
 };
 //=============================================================================
-struct VertexBN
+struct VertexNMap
 {
-	VertexBN()
-	:normal(0, 0, 0),
+	VertexNMap()
+	:pos(0,0,0),
+	normal(0, 0, 0),
 	tangent(0, 0, 0),
 	binormal(0, 0, 0),
 	tex0(0, 0){}
-	VertexBN(float nx, float ny, float nz,
+	VertexNMap(float x, float y, float z,
+		float nx, float ny, float nz,
 		float tx, float ty, float tz,
 		float bnx, float bny, float bnz,
-		float v, float u) :normal(nx, ny, nz), tangent(tx, ty, tz), binormal(bnx, bny, bnz), tex0(v, u){}
-		
+		float v, float u) :pos(x, y, z), normal(nx, ny, nz), tangent(tx, ty, tz), binormal(bnx, bny, bnz), tex0(v, u){}
+	VertexNMap(const D3DXVECTOR3& v, const D3DXVECTOR3& n, 
+		const D3DXVECTOR3& t, const D3DXVECTOR3& bn, const D3DXVECTOR2& vu)
+		:pos(v), normal(n), tangent(t), binormal(bn), tex0(vu){}
+
+	D3DXVECTOR3 pos;
 	D3DXVECTOR3 normal;
 	D3DXVECTOR3 tangent;
 	D3DXVECTOR3 binormal;
 	D3DXVECTOR2 tex0;
+	static IDirect3DVertexDeclaration9* Decl;
 };
 #endif // VERTEX_H
