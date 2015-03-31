@@ -78,6 +78,9 @@
     <ClInclude Include="Teapot.h">
       <Filter>Headers\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="EnhancedMaterial.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

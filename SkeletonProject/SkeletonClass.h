@@ -77,22 +77,22 @@ private:
 
 	//	Variables added to "cycle" through different objects
 	int m_currentobject_index;
-	bool m_key_O_down = false;
 	bool m_key_W_down = false;
 	bool m_key_T_down = false;
+	bool m_key_O_down = false;
+	bool m_key_R_down = false;
+	bool m_key_N_down = false;
+	bool m_key_min_down = false;
+	bool m_key_pls_down = false;
+	bool m_key_A_down = false;
 	bool m_key_S_down = false;
-	bool m_key_D_down = false;
-	bool m_key_E_down = false;
-
-
-
-	//	Variables added to "cycle" through different shaders
-					//	Shader Indices
-					/*	0 - None(?)
-						1 - Phong
-						2 - Spotlight
-					*/
-	int m_current_shader_index = 0;
+	bool m_key_1_down = false;
+	bool m_key_2_down = false;
+	bool m_key_3_down = false;
+	bool m_key_4_down = false;
+	bool m_key_5_down = false;
+	bool m_key_6_down = false;
+	bool m_key_7_down = false;
 
 
 	//	Variables added to toggle various features
@@ -100,10 +100,16 @@ private:
 	bool i_Solid_frame = true;
 		//	With/Without Texture
 	bool i_texture_on = false;
-		//	Specular on/off
-	bool i_spec_on = true;
-		//	Diffuse on/off
-	bool i_diff_on = true;
+		//	Environment Reflection
+	bool i_evir_reflect_on = false;
+	//	Normal mapping
+	bool i_norm_mapping_on = false;
+	//	spec and reflect blend
+	int i_blend = 0;
+	//	normal strength
+	int i_norm_strength = 0;
+	//	spec coefficient
+	int i_spec_coefficient = 2;
 
 	//	Shaders
 	ID3DXEffect* m_current_effect;

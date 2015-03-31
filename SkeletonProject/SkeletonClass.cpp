@@ -221,35 +221,125 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_T))
 		m_key_T_down = false;
 
-	if (gDInput->keyDown(DIK_S) && !m_key_S_down)
-	{
-		i_spec_on = !i_spec_on;
-		m_key_S_down = true;
-	}
-	else if (!gDInput->keyDown(DIK_S))
-		m_key_S_down = false;
-
-	if (gDInput->keyDown(DIK_D) && !m_key_D_down)
-	{
-		i_diff_on = !i_diff_on;
-		m_key_D_down = true;
-	}
-	else if (!gDInput->keyDown(DIK_D))
-		m_key_D_down = false;
-
 	//	Check for "O" input for changing currentobject_index
 	if (gDInput->keyDown(DIK_O) && !m_key_O_down)
 		ChangeObject();
 	else if (!gDInput->keyDown(DIK_O))
 		m_key_O_down = false;
 
-	if (gDInput->keyDown(DIK_E) && !m_key_E_down)
+
+	if (gDInput->keyDown(DIK_R) && !m_key_R_down)
 	{
-		m_current_shader_index++;
-		m_key_E_down = true;
+		i_evir_reflect_on = !i_evir_reflect_on;
+		m_key_R_down = true;
 	}
-	else if (!gDInput->keyDown(DIK_E))
-		m_key_E_down = false;
+	else if (!gDInput->keyDown(DIK_R))
+		m_key_R_down = false;
+
+	if (gDInput->keyDown(DIK_N) && !m_key_N_down)
+	{
+		i_norm_mapping_on = !i_norm_mapping_on;
+		m_key_N_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_N))
+		m_key_N_down = false;
+
+	if (gDInput->keyDown(DIK_NUMPADPLUS) && !m_key_pls_down)
+	{
+		i_blend += 0.1f;
+		if (i_blend > 1)
+		{
+			i_blend = 1;
+		}
+		m_key_pls_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_NUMPADPLUS))
+		m_key_pls_down = false;
+	if (gDInput->keyDown(DIK_NUMPADMINUS) && !m_key_min_down)
+	{
+		i_blend -= 0.1f;
+		if (i_blend < 0)
+		{
+			i_blend = 0;
+		}
+		m_key_min_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_NUMPADMINUS))
+		m_key_min_down = false;
+
+	if (gDInput->keyDown(DIK_A) && !m_key_A_down)
+	{
+		i_norm_strength += 0.1f;
+		if (i_norm_strength > 1)
+		{
+			i_norm_strength = 1;
+		}
+		m_key_A_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_A))
+		m_key_A_down = false;
+	if (gDInput->keyDown(DIK_S) && !m_key_S_down)
+	{
+		i_norm_strength -= 0.1f;
+		if (i_norm_strength < 0)
+		{
+			i_norm_strength = 0;
+		}
+		m_key_S_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_S))
+		m_key_S_down = false;
+
+	if (gDInput->keyDown(DIK_1) && !m_key_1_down)
+	{
+		i_spec_coefficient = 2;
+		m_key_1_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_1))
+		m_key_1_down = false;
+	if (gDInput->keyDown(DIK_2) && !m_key_2_down)
+	{
+		i_spec_coefficient = 4;
+			m_key_2_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_2))
+		m_key_1_down = false;
+	if (gDInput->keyDown(DIK_3) && !m_key_3_down)
+	{
+		i_spec_coefficient = 8;
+			m_key_1_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_3))
+		m_key_3_down = false;
+	if (gDInput->keyDown(DIK_4) && !m_key_4_down)
+	{
+		i_spec_coefficient = 16;
+			m_key_4_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_4))
+		m_key_4_down = false;
+	if (gDInput->keyDown(DIK_5) && !m_key_5_down)
+	{
+		i_spec_coefficient = 32;
+		m_key_5_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_5))
+		m_key_5_down = false;
+	if (gDInput->keyDown(DIK_6) && !m_key_6_down)
+	{
+		i_spec_coefficient = 64;
+		m_key_6_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_6))
+		m_key_6_down = false;
+	if (gDInput->keyDown(DIK_7) && !m_key_7_down)
+	{
+		i_spec_coefficient = 16;
+		m_key_7_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_7))
+		m_key_7_down = false;
+
 
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY += gDInput->mouseDY() / 100.0f;
