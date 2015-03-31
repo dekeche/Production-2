@@ -71,4 +71,21 @@ struct VertexPNT
 	static IDirect3DVertexDeclaration9* Decl;
 };
 //=============================================================================
+struct VertexBN
+{
+	VertexBN()
+	:normal(0, 0, 0),
+	tangent(0, 0, 0),
+	binormal(0, 0, 0),
+	tex0(0, 0){}
+	VertexBN(float nx, float ny, float nz,
+		float tx, float ty, float tz,
+		float bnx, float bny, float bnz,
+		float v, float u) :normal(nx, ny, nz), tangent(tx, ty, tz), binormal(bnx, bny, bnz), tex0(v, u){}
+		
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR3 binormal;
+	D3DXVECTOR2 tex0;
+};
 #endif // VERTEX_H
