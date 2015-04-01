@@ -179,12 +179,12 @@ float4 NormalMapPS(float3 normalW:TEXCOORD0, float posW:TEXCOORD1,) : COLOR
 
 }
 
-technique PhongTech
+technique Assignment4Tech
 {
 	pass P0
 	{
 		//	Specify vertex & pixel shader associated w/ this pass
-		vertexShader = compile vs_2_0 PhongVS();
-		pixelShader = compile ps_2_0 PhongPS();
+		vertexShader = compile vs_2_0 NormalMapVS();
+		pixelShader = compile ps_2_0 NormalMapPS();
 	}
 }
