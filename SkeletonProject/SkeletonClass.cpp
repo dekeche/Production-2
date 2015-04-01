@@ -498,6 +498,9 @@ void SkeletonClass::drawScene()
     // display the render statistics
     GfxStats::GetInstance()->display();
 
+	//	display UI help
+	GfxStats::GetInstance()->displayAssignment4(i_blend, i_norm_strength, i_spec_coefficient);
+
 	HR(gd3dDevice->EndScene());
 
 	// Present the backbuffer.

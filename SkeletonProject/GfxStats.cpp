@@ -116,8 +116,35 @@ void GfxStats::display()
 	sprintf(buffer, "Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
 		"Triangle Count = %d\n"
-		"Vertex Count = %d", mFPS, mMilliSecPerFrame, mNumTris, mNumVertices);
+		"Vertex Count = %d\n", mFPS, mMilliSecPerFrame, mNumTris, mNumVertices);
 
 	RECT R = {5, 5, 0, 0};
 	HR(mFont->DrawText(0, buffer, -1, &R, DT_NOCLIP, D3DCOLOR_XRGB(0,0,0)));
+}
+
+// Display UI choices/help 
+void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef)
+{
+	//	Make static so memory is not allocated every frame
+	static char v_buffer[256];
+
+	//	set message
+	sprintf(v_buffer,
+		"Keys:\n"
+		"W - Switch b/t Solid/Wireframe\n"
+		"T - Switch texture On/Off\n"
+		"O - Switch b/t Rendering Objects\n"
+		"R - Switch Environment Reflection On/Off\n"
+		"N - Switch Normal Mapping On/Off\n"
+		"-//+ - Increment/Decrement Blend b/t Reflection & Specular\n"
+		"\tCurrent Blend : %d\n"
+		"A//S - Increment/Decrement Strength of Normal\n"
+		"\tCurrent Strength : %d\n"
+		"1..7 - Set Specular Coefficient\n"
+		"\t Current Coefficient Value: %i\n"
+		,pRSBlend, pNormStr, pSpecCoef);
+
+	RECT v_R = {10, 10, 0, 0};
+	HR(mFont->DrawText(0, v_buffer, -1, &v_R, DT_NOCLIP, D3DCOLOR_XRGB(5,0,0)));
+
 }

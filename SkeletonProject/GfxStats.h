@@ -34,6 +34,11 @@ public:
 	void update(float dt);
 	void display();
 
+	//	added for ASSIGNMENT4
+		//	displays UI choices to th4e top left of the screen as well as help for UI
+	void displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef);
+
+
 private:
 	// Prevent copying
 	GfxStats(const GfxStats& rhs);

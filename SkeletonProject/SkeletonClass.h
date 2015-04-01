@@ -105,9 +105,9 @@ private:
 	//	Normal mapping
 	bool i_norm_mapping_on = false;
 	//	spec and reflect blend
-	int i_blend = 0;
+	float i_blend = 0;
 	//	normal strength
-	int i_norm_strength = 0;
+	float i_norm_strength = 0;
 	//	spec coefficient
 	int i_spec_coefficient = 2;
 
