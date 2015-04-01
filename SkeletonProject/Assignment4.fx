@@ -7,6 +7,7 @@ uniform extern float4x4 gWorldInverseTranspose;
 uniform extern float4x4 gWVP;
 uniform extern float3 gEyePosW;
 uniform extern texture gTex;
+uniform extern texture gEnvironment;
 uniform extern texture gNormalMap;
 
 //	Components of the Vertex(object) color
@@ -35,6 +36,9 @@ uniform extern float3 gAttenuation012;
 
 uniform extern float gSpecReflectBlend;
 
+
+uniform extern float3 gNormalBlend;
+
 uniform extern bool gTextureOn;
 uniform extern bool gNormalMappingOn;
 uniform extern bool gEnvirnReflectionOn;
@@ -42,10 +46,24 @@ uniform extern bool gEnvirnReflectionOn;
 
 struct OutputVS
 {
-	float4 posH		: POSITION0;
-	float3 toEyeT	: TEXCOORD0;
-	float3 LightDirT : TEXCOORD1;
-	float2 tex0 : TEXCOORD2;
+	float4 posH : POSITION0;
+	float4 posW : POSITION1;
+
+	float3 normalW : TEXCOORD0;
+	float3 toEyeW : TEXCOORD1;
+
+	float3 toEyeT : TEXCOORD2;
+	float3 lightDirT : TEXCOORD3;
+};
+
+sampler EnvMapS = sampler_state
+{
+	Texture = <gEnvironment>;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressV = WRAP;
+	AddressV = WRAP;
 };
 
 sampler TexS = sampler_state
@@ -75,6 +93,16 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 tangentL : TANGENT0, float3
 	//	Initialize our return value
 	OutputVS outVS = (OutputVS)0;
 
+	//	Transform the normal to be in world space
+	outVS.normalW = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
+	//	NORMALIZE IT
+	outVS.normalW = normalize(outVS.normalW);
+
+	//	Transform vertex position to world space
+	outVS.posW = mul(float4(posL, 1.0f), gWorld).xyz;
+
+
+
 
 	float3x3 TBN;
 	TBN[0] = tangentL;
@@ -84,8 +112,10 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 tangentL : TANGENT0, float3
 	//Matrix transforms from object space to tangent space
 	float3x3 toTangentSpace = transpose(TBN);
 
-	//	Transform eye position to local space
-	float3 eyePosL = mul(float4(gEyePosW, 1.0f), gwWorldInv);
+		//	Transform eye position to local space
+		float3 eyePosL = mul(float4(gEyePosW, 1.0f), gwWorldInv);
+
+		outVS.toEyeT = mul(toEyeL, toTangentSpace);
 
 	// Transform light direction to tangent space.
 	float3 lightDirL = mul(float4(gLightVecW, 0.0f), gWorldInv);
@@ -106,26 +136,47 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 tangentL : TANGENT0, float3
 
 
 //	Returns a float4 that is the COLOR.
-float4 NormalMapPS(float3 toEyeT : TEXCOORD0, float3 lightDirT : TEXCOORD1, float2 tex0 : TEXCOORD2) : COLOR
+float4 NormalMapPS(float3 normalW:TEXCOORD0, float posW:TEXCOORD1,) : COLOR
 {
+	//	The pixel shader will compute the Specular equation to get the light/color
+	//	that will make it's way to the camera eye.
+	//	Interpolated normals can become unnormal, so renormalize again just to be sure
+	normalW = normalize(normalW);
 
-	//	Interpolated normals can become unnormal--so normalize
-	toEyeT = normalize(toEyeT);
-	lightDirT = normalize(lightDirT);
+	//	Compute vector from vertex to eye position
+	float3 toEye = normalize(gEyePosW - posW);
 
-	// Light vector is opposite the direction of the light.
-	float3 lightVecT = -lightDirT;
+	// Unit vector from vertex to light source.
+	float3 lightVecW = normalize(gLightPosW - posW);
 
-	// Expand from [0,1] compressed interval to
-	//true[-1,1] interval (Equation 21.1).
-	normalT = 2.0f*normalT - 1.0f;
 
-	// Make it a unit vector
-	normalT = normalize(normalT);
+	//	Compute reflection vector
+	//float3 r = reflect(-gLightVecW, normalW);
+	float3 r = reflect(gLightDirW, normalW);
 
-	//lighting calculations
-	float3 r = reflect(lightDirT, normalT);
-	float3 t = pow(max(dot(r,toEyeT))
+	//	Determine how much specular light makes it's way into the eye(camera)
+	float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
+
+	////	Determine diffuse light intensity that strikes the vertex
+	//float s = max(dot(gLightDirW, normalW), 0.0f);
+	//	Spotlight factor
+	float spot = pow(max(dot(-lightVecW, gLightDirW), 0.0f), gSpotPower);
+
+	//	Compute the ambient, diffuse, and specular terms respecitively.
+	float3 spec = t*(gSpecMtrl*gSpecLight).rgb;
+	if (gEnvirnReflectionOn)
+	{
+		float3 envMapTex = reflect(-toEyeW, normalW);
+		float3 reflectColor = texCube(EnvMapS, gEnvironment);
+		spec = spec*(1 - gSpecReflectBlend) + reflectColor*(gSpecReflectBlend);
+	}
+	float3 diffuse = spot*(gDiffuseMtrl*gDiffuseLight).rgb;
+	float3 ambient = gAmbientMtrl*gAmbientLight;
+	//	Sum all the components together and copy over the diffuse alpha
+
+	float4 all_together = float4(((ambiant*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
+
+
 }
 
 technique PhongTech

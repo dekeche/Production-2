@@ -11,6 +11,7 @@ IDirect3DVertexDeclaration9* VertexPos::Decl = 0;
 IDirect3DVertexDeclaration9* VertexCol::Decl = 0;
 IDirect3DVertexDeclaration9* VertexPN::Decl = 0;
 IDirect3DVertexDeclaration9* VertexPNT::Decl = 0;
+IDirect3DVertexDeclaration9* VertexNMap::Decl = 0;
 
 
 void InitAllVertexDeclarations()
