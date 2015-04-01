@@ -54,9 +54,15 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	}
 
 	InitAllVertexDeclarations();
-	//	Load Texture
 
+	//	Load Texture(s)
+		//	object textures
 	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &mp_texture));
+		//	environment map texture
+	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, m_envMap_filepath.c_str(), &m_envMap_texture));
+
+	//	Create Environment Map mesh/cube
+	HR(D3DXCreateBox(gd3dDevice, m_envMap_cubeSize, m_envMap_cubeSize, m_envMap_cubeSize, &m_envMap_mesh, NULL));
 
 	//	Initialize camera
 	mCameraRadius    = 10.0f;
@@ -116,6 +122,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_Objects.push_back(temp);
 
 
+
 	//	Initialize the World Matrix (centered in origin, ie identity matrix)
 	D3DXMatrixIdentity(&mWorld);
 
@@ -156,11 +163,18 @@ SkeletonClass::~SkeletonClass()
     m_Objects.clear();
 
 	//	Destroy effects
+	ReleaseCOM(m_assignment4_FX);
 	ReleaseCOM(m_phong_FX);
 	ReleaseCOM(m_spot_FX);
 	ReleaseCOM(mp_texture);
 
 	DestroyAllVertexDeclarations();
+
+
+	//	Release environment map
+	m_envMap_mesh->Release();
+	m_envMap_texture->Release();
+
 }
 
 bool SkeletonClass::checkDeviceCaps()
@@ -187,6 +201,7 @@ void SkeletonClass::onLostDevice()
 	GfxStats::GetInstance()->onLostDevice();
 	
 	//	Effects
+	HR(m_assignment4_FX->OnLostDevice());
 	HR(m_phong_FX->OnLostDevice());
 	HR(m_spot_FX->OnLostDevice());
 }
@@ -196,6 +211,7 @@ void SkeletonClass::onResetDevice()
 	GfxStats::GetInstance()->onResetDevice();
 
 	//	Effects
+	HR(m_assignment4_FX->OnResetDevice());
 	HR(m_phong_FX->OnResetDevice());
 	HR(m_spot_FX->OnResetDevice());
 
@@ -385,6 +401,9 @@ void SkeletonClass::drawScene()
 
 	HR(gd3dDevice->BeginScene());
 
+
+
+
     // Set render statws for the entire scene here:
 
 	//	Check if we're SOLID or WIRE frame
@@ -422,8 +441,24 @@ void SkeletonClass::drawScene()
 		HR(m_current_effect->SetFloat(mh_spotPower, m_spot_power));
 
 
+
+
+		//	Set Environment Map Values
+
+
+
+
+
 		UINT numPasses = 0;
 		HR(m_current_effect->Begin(&numPasses, 0));
+
+		//	Draw Environment Map (first)
+		if (i_evir_reflect_on && mh_environmentMap != NULL)
+			//	set effet parameters
+			m_current_effect->SetTexture(mh_environmentMap, m_envMap_texture);
+
+		HR(m_envMap_mesh->DrawSubset(0));
+
 		for (UINT i = 0; i < numPasses; ++i)
 		{
 			HR(m_current_effect->BeginPass(i));
@@ -467,6 +502,7 @@ void SkeletonClass::drawScene()
 
 	// Present the backbuffer.
 	HR(gd3dDevice->Present(0, 0, 0, 0));
+
 }
 
 void SkeletonClass::buildViewMtx()
@@ -545,7 +581,6 @@ void SkeletonClass::buildPhongFX()
 	HR(m_phong_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
 
 }
-
 void SkeletonClass::obtainPhongHandles()
 {
 	//	set technique
@@ -579,7 +614,6 @@ void SkeletonClass::obtainPhongHandles()
 	mh_textureOn = m_phong_FX->GetParameterByName(0, "gTextureOn");
 
 }
-
 
 
 void SkeletonClass::buildSpotFX()
@@ -635,4 +669,65 @@ void SkeletonClass::obtainSpotHandles()
 	mh_spotPower = m_spot_FX->GetParameterByName(0, "gSpotPower");
 
 	mh_textureOn = m_spot_FX->GetParameterByName(0, "gTextureOn");
+}
+
+
+void SkeletonClass::buildAssignment4FX()
+{
+	//	Buffer for any errors
+	ID3DXBuffer* errors = 0;
+
+	//	Create FX from .fx file
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "Assignment4.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_assignment4_FX, &errors));
+
+	//	Check for & display any errors
+	if (errors)
+		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
+
+
+
+	//	Obtain the handles
+	obtainPhongHandles();
+
+	HR(m_assignment4_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
+	HR(m_assignment4_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
+	HR(m_assignment4_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
+	HR(m_assignment4_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
+}
+void SkeletonClass::obtainAssignment4Handles()
+{
+	//	set technique
+	mh_Technique = m_assignment4_FX->GetTechniqueByName("Assignment4Tech");
+
+	//	set world view proj matrix
+	mh_WVP = m_assignment4_FX->GetParameterByName(0, "gWVP");
+	//	set world inverse transpose
+	mh_WorldInverseTranspose = m_assignment4_FX->GetParameterByName(0, "gWorldInverseTranspose");
+	//	eye/camera position
+	mh_eyePos = m_assignment4_FX->GetParameterByName(0, "gEyePosW");
+	//	world matrix
+	mh_World = m_assignment4_FX->GetParameterByName(0, "gWorld");
+	//	Light components
+	mh_ambientLight = m_assignment4_FX->GetParameterByName(0, "gAmbientLight");
+	mh_diffuseLight = m_assignment4_FX->GetParameterByName(0, "gDiffuseLight");
+	mh_specularLight = m_assignment4_FX->GetParameterByName(0, "gSpecLight");
+
+	mh_spotPower = m_assignment4_FX->GetParameterByName(0, "gSpotPower");
+
+	//	Light as a Vector
+	mh_LightVecW = m_assignment4_FX->GetParameterByName(0, "gLightVecW");
+
+	//	Light as a position & direction
+	mh_LightPosW = m_assignment4_FX->GetParameterByName(0, "gLightPosW");
+	mh_LightDirectW = m_assignment4_FX->GetParameterByName(0, "gLightDirW");
+
+	//	attuenuation of light
+	mh_attenuation = m_assignment4_FX->GetParameterByName(0, "gAttenuation012");
+
+	mh_textureOn = m_assignment4_FX->GetParameterByName(0, "gTextureOn");
+
+
+	//	Environment map handle
+	mh_environmentMap = m_assignment4_FX->GetParameterByName(0, "gEnvironment");
+
 }

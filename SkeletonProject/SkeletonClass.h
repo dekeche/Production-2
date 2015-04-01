@@ -116,6 +116,9 @@ private:
 	ID3DXEffect* m_phong_FX;
 	const std::string PHONG_TECHNIQUE = "Technique";
 	ID3DXEffect* m_spot_FX;
+	ID3DXEffect* m_assignment4_FX;
+
+
 		//	HANDLES
 	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
 					//	For BEST simplicity, have the technique be called "Technique" unless stated otherwise
@@ -139,6 +142,8 @@ private:
 	D3DXHANDLE mh_spotPower;				//	power of a SPOTLIGHT
 
 	D3DXHANDLE mh_textureOn;
+
+	D3DXHANDLE mh_environmentMap;
 		
 	
 		//	Function for SHADER
@@ -146,8 +151,26 @@ private:
 	void obtainPhongHandles();
 	void buildSpotFX();
 	void obtainSpotHandles();
+		//	assignment4
+	void buildAssignment4FX();
+	void obtainAssignment4Handles();
+
 
 	IDirect3DTexture9* mp_texture;
+
+
+
+	//	Assignment 4
+		//	Environment map
+			//	file path
+	std::string m_envMap_filepath = "Assets//cubeMap.dds";
+			//	texture
+	IDirect3DCubeTexture9* m_envMap_texture = 0;
+			//	mesh
+	LPD3DXMESH m_envMap_mesh;
+	const float m_envMap_cubeSize = 5.0f;
+
+
 };
 //=============================================================================
 #endif // _SKELETON_CLASS_H_
