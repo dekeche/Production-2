@@ -36,8 +36,7 @@ public:
 
 	//	added for ASSIGNMENT4
 		//	displays UI choices to th4e top left of the screen as well as help for UI
-	void displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef);
-
+	void displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef, bool pTextureToggle, bool pSolidToggle, bool pEnvReflectToggle, bool pNormalMapToggle);
 
 private:
 	// Prevent copying
