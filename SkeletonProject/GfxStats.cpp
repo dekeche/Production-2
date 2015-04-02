@@ -113,7 +113,7 @@ void GfxStats::display()
 	// Make static so memory is not allocated every frame.
 	static char buffer[256];
 
-	sprintf(buffer, "Frames Per Second = %.2f\n"
+	sprintf_s(buffer, "Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
 		"Triangle Count = %d\n"
 		"Vertex Count = %d\n", mFPS, mMilliSecPerFrame, mNumTris, mNumVertices);
@@ -122,29 +122,33 @@ void GfxStats::display()
 	HR(mFont->DrawText(0, buffer, -1, &R, DT_NOCLIP, D3DCOLOR_XRGB(0,0,0)));
 }
 
+
 // Display UI choices/help 
-void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef)
+void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef, bool pTextureToggle, bool pSolidToggle, bool pEnvReflectToggle, bool pNormalMapToggle)
 {
 	//	Make static so memory is not allocated every frame
-	static char v_buffer[256];
+		static char v_buffer[500];
 
 	//	set message
-	sprintf(v_buffer,
+	sprintf_s(v_buffer,
 		"Keys:\n"
-		"W - Switch b/t Solid/Wireframe\n"
-		"T - Switch texture On/Off\n"
-		"O - Switch b/t Rendering Objects\n"
-		"R - Switch Environment Reflection On/Off\n"
-		"N - Switch Normal Mapping On/Off\n"
-		"\n+/- - Increment/Decrement Blend b/t Reflection & Specular\n"
+		"W -- Switch b/t Solid / Wireframe\n%s is active\n"		"\nT -- Switch texture On / Off\nTexture is %s\n"
+		"\nO -- Switch b / t Rendering Objects\n"
+		"\nR -- Switch Environment Reflection On / Off\nEnvironment Reflection is %s\n"
+		"\nN -- Switch Normal Mapping On/Off\nNormal Mapping is %s\n"
+		"\n+/- -- Increment / Decrement Blend b / t Reflection & Specular\n"
 		"Current Blend : %.1f\n"
-		"\nA/S - Increment/Decrement Strength of Normal\n"
+		"\nA/S -- Increment / Decrement Strength of Normal\n"
 		"Current Strength : %.1f\n"
-		"\n1..7 - Set Specular Coefficient\n"
+		"\n1..7 -- Set Specular Coefficient\n"
 		"Current Coefficient Value: %d\n"
-		,pRSBlend, pNormStr, pSpecCoef);
+		   , (pSolidToggle ? "Solid frame" :"Wire frame")
+		   , (pTextureToggle ? "on" : "off")
+		   , (pEnvReflectToggle ? "on" : "off")
+		   , (pNormalMapToggle ? "on" : "off")
+		   , pRSBlend, pNormStr, pSpecCoef);
 
-	RECT v_R = {5, 73, 0, 0};
-	HR(mFont->DrawText(0, v_buffer, -1, &v_R, DT_NOCLIP, D3DCOLOR_XRGB(200,0,0)));
+	RECT v_R = { 5, 80, 0, 0 };
+	HR(mFont->DrawText(0, v_buffer, -1, &v_R, DT_NOCLIP, D3DCOLOR_XRGB(200, 0, 0)));
 
 }
