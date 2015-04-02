@@ -31,12 +31,12 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 
 	D3DVERTEXELEMENT9 elements[64];
 	UINT numElements = 0;
-	VertexPNT::Decl->GetDeclaration(elements, &numElements);
+	VertexNMap::Decl->GetDeclaration(elements, &numElements);
 	HR(m_MeshObject->CloneMesh(D3DXMESH_SYSTEMMEM,elements,gd3dDevice, &clone));
 
 	ReleaseCOM(m_MeshObject);
 
-	VertexPNT* vertices = 0;
+	VertexNMap* vertices = 0;
 	HR(clone->LockVertexBuffer(0, (void**)&vertices));
 
 	for (UINT i = 0; i < clone->GetNumVertices(); i++)
@@ -51,6 +51,10 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 
 	HR(clone->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, elements, gd3dDevice, &m_MeshObject));
 
+	HR(D3DXComputeTangentFrameEx(clone, D3DDECLUSAGE_TEXCOORD, 0,
+		D3DDECLUSAGE_BINORMAL, 0, D3DDECLUSAGE_TANGENT, 0,
+		D3DDECLUSAGE_NORMAL, 0, 0, 0, 0.01f, 0.25f, 0.01f,
+		&clone,0));
 	ReleaseCOM(clone);
 
 	int mVerts = m_MeshObject->GetNumVertices();

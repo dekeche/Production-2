@@ -85,6 +85,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	buildSpotFX();
 	buildPhongFX();
+	buildAssignment4FX();
 
 	mConeMaterial = new BaseMaterial();
 
