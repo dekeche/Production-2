@@ -51,9 +51,7 @@ struct OutputVS
 	float3 tangent : TEXCOORD1;
 	float3 binormal : TEXCOORD2;
 	float3 position : TEXCOORD3;
-	float3 lightDir : TEXCOORD4;
-	float3 viewDir : TEXCOORD5;
-	float2 tex0 : TEXCOORD6;
+	float2 tex0 : TEXCOORD4;
 };
 
 sampler EnvMapS = sampler_state
@@ -96,35 +94,23 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 	outVS.normal = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
 	//	NORMALIZE IT
 	outVS.normal = normalize(outVS.normal);
+	outVS.tangent = normalize(tangentL);
+	outVS.binormal = normalize(binormalL);
 
 	//	Transform vertex position to world space
 	outVS.position = mul(float4(posL, 1.0f), gWorld).xyz;
 
-#if gNormalMappingOn
-
-	float3x3 TBN;
-	TBN[0] = tangentL;
-	TBN[1] = binormalL;
-	TBN[2] = normalL;
-
-	//Matrix transforms from object space to tangent space
-	float3x3 toTangentSpace = transpose(TBN);
-
-	//	Transform eye position to local space
-	float3 eyePosL = mul(float4(gEyePosW, 1.0f), gwWorldInv);
-
-	outVS.toEyeT = mul(toEyeL, toTangentSpace);
+	if (gNormalMappingOn)
+	{
+		outVS.normal = normalL;
+		outVS.tangent = tangentL;
+		outVS.binormal = binormalL;
+	}
 
 	// Transform light direction to tangent space.
-	float3 lightDirL = mul(float4(gLightVecW, 0.0f), gWorldInv);
-	outVS.LightDirT = mul(lightDirL, toTangentSpace);
-	outVS.normal = normalL;
-	outVS.tangent = tangentL;
-	outVS.binormal = binormalL;
-
-#endif
 	// Pass on texture coordinates to be interpolated
 	// in rasterization.
+	outVS.posH = mul(float4(posL, 1.0f), gWVP);
 	outVS.tex0 = tex0;
 	//	return the output & continue into PS
 	return outVS;
@@ -138,29 +124,29 @@ float4 NormalMapPS(float3 normal : TEXCOORD0,
 float3 tangent : TEXCOORD1,
 float3 binormal : TEXCOORD2,
 float3 position : TEXCOORD3,
-float3 lightDir : TEXCOORD4,
-float3 viewDir : TEXCOORD5,
 float2 tex0 : TEXCOORD6) : COLOR
 {
 
-#if gNormalMappingOn
-	float3x3 TBN;
-	TBN[0] = normalize(tangent);
-	TBN[1] = normalize(binormal);
-	TBN[2] = normalize(normal);
-	TBN = transpose(TBN);
-	normal = tex2D(NormalMapS, tex0);
-	normal = mul(TBN, normal);
-#endif
+	if (gNormalMappingOn)
+	{
+		float3x3 TBN;
+		TBN[0] = tangent;
+		TBN[1] = binormal;
+		TBN[2] = normal;
+		TBN = transpose(TBN);
+		normal = tex2D(NormalMapS, tex0);
+		normal = mul(TBN, normal);
+	}
 
 	float3 toEye = normalize(gEyePosW - position);
-		float3 lightVecW = normalize(gLightPosW - position);
-		//	Compute reflection vector
-		//float3 r = reflect(-gLightVecW, normalW);
-		float3 r = reflect(gLightDirW, normal);
+	float3 lightVecW = normalize(gLightPosW - position);
+	
+	//	Compute reflection vector
+    //float3 r = reflect(-gLightVecW, normalW);
+	float3 r = reflect(gLightDirW, normal);
 
-		//	Determine how much specular light makes it's way into the eye(camera)
-		float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
+	//	Determine how much specular light makes it's way into the eye(camera)
+	float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
 
 	////	Determine diffuse light intensity that strikes the vertex
 	//float s = max(dot(gLightDirW, normalW), 0.0f);
@@ -172,8 +158,20 @@ float2 tex0 : TEXCOORD6) : COLOR
 		float3 diffuse = spot*(gDiffuseMtrl*gDiffuseLight).rgb;
 		float3 ambient = gAmbientMtrl*gAmbientLight;
 
+	if (gEnvirnReflectionOn)
+	{
+		float3 envMapTex = reflect(-toEye, normal);
+			float3 reflectColor = texCUBE(EnvMapS, envMapTex);
+			spec = spec*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
+	}
 		float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
 
+	if (gTextureOn)
+	{
+		float3 texColor = tex2D(TexS, tex0).rgb;
+		float3 diff = all_together.rgb*texColor;
+		return float4(diff, all_together.a);
+	}
 		return all_together;
 }
 

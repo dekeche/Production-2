@@ -46,6 +46,7 @@ void EnhancedMaterial::setViewMtx(D3DXVECTOR3 pos, D3DXVECTOR3 target, D3DXVECTO
 	HR(m_Effect->SetValue(m_gEyePosW, &pos, sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_gLightPosW, &pos, sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_gLightDirW, &lightDir, sizeof(D3DXVECTOR3)));
+	HR(m_Effect->CommitChanges());
 };
 void EnhancedMaterial::setLight(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, D3DXVECTOR3 vect)
 {
@@ -53,12 +54,14 @@ void EnhancedMaterial::setLight(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR 
 	HR(m_Effect->SetValue(m_gDiffuseLight, &diffuse, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(m_gSpecLight, &spec, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(m_gLightVecW, &vect, sizeof(D3DXVECTOR3)));
+	HR(m_Effect->CommitChanges());
 };
 void EnhancedMaterial::setTextures(IDirect3DTexture9* texture, IDirect3DTexture9* normal, IDirect3DCubeTexture9* reflection)
 {
 	HR(m_Effect->SetTexture(m_texture, texture));
 	HR(m_Effect->SetTexture(m_gNormalMap, normal));
 	HR(m_Effect->SetTexture(m_gEnvironment, reflection));
+	HR(m_Effect->CommitChanges());
 };
 void EnhancedMaterial::setValues(bool textureOn, bool normalOn, bool envReflecOn, float blendNormal, float reflectBlend, float specCo)
 {
@@ -68,4 +71,5 @@ void EnhancedMaterial::setValues(bool textureOn, bool normalOn, bool envReflecOn
 
 	HR(m_Effect->SetFloat(m_gNormalBlend, blendNormal));
 	HR(m_Effect->SetFloat(m_gSpecReflectBlend, reflectBlend));
+	HR(m_Effect->CommitChanges());
 };
