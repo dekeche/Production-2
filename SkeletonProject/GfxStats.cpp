@@ -136,15 +136,15 @@ void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef)
 		"O - Switch b/t Rendering Objects\n"
 		"R - Switch Environment Reflection On/Off\n"
 		"N - Switch Normal Mapping On/Off\n"
-		"-//+ - Increment/Decrement Blend b/t Reflection & Specular\n"
-		"\tCurrent Blend : %d\n"
-		"A//S - Increment/Decrement Strength of Normal\n"
-		"\tCurrent Strength : %d\n"
-		"1..7 - Set Specular Coefficient\n"
-		"\t Current Coefficient Value: %i\n"
+		"\n+/- - Increment/Decrement Blend b/t Reflection & Specular\n"
+		"Current Blend : %.1f\n"
+		"\nA/S - Increment/Decrement Strength of Normal\n"
+		"Current Strength : %.1f\n"
+		"\n1..7 - Set Specular Coefficient\n"
+		"Current Coefficient Value: %d\n"
 		,pRSBlend, pNormStr, pSpecCoef);
 
-	RECT v_R = {10, 10, 0, 0};
-	HR(mFont->DrawText(0, v_buffer, -1, &v_R, DT_NOCLIP, D3DCOLOR_XRGB(5,0,0)));
+	RECT v_R = {5, 73, 0, 0};
+	HR(mFont->DrawText(0, v_buffer, -1, &v_R, DT_NOCLIP, D3DCOLOR_XRGB(200,0,0)));
 
 }
