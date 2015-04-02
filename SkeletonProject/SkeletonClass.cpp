@@ -406,7 +406,7 @@ void SkeletonClass::drawScene()
 	HR(gd3dDevice->BeginScene());
 
 		//	draw environment map mesh
-	HR(m_envMap_mesh->DrawSubset(0));
+//	HR(m_envMap_mesh->DrawSubset(0));
 
 
     // Set render statws for the entire scene here:
@@ -473,7 +473,7 @@ void SkeletonClass::drawScene()
     GfxStats::GetInstance()->display();
 
 	//	display UI help
-	GfxStats::GetInstance()->displayAssignment4(i_blend, i_norm_strength, i_spec_coefficient);
+	GfxStats::GetInstance()->displayAssignment4(i_blend, i_norm_strength, i_spec_coefficient, i_texture_on, i_Solid_frame, i_evir_reflect_on, i_norm_mapping_on);
 
 	HR(gd3dDevice->EndScene());
 
