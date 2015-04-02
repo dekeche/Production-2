@@ -168,7 +168,7 @@ private:
 	IDirect3DCubeTexture9* m_envMap_texture = 0;
 			//	mesh
 	LPD3DXMESH m_envMap_mesh;
-	const float m_envMap_cubeSize = 5.0f;
+	const float m_envMap_cubeSize = 16.0f;
 
 
 };

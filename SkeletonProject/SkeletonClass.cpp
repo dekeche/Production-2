@@ -202,7 +202,7 @@ void SkeletonClass::onLostDevice()
 	GfxStats::GetInstance()->onLostDevice();
 	
 	//	Effects
-	HR(m_assignment4_FX->OnLostDevice());
+//	HR(m_assignment4_FX->OnLostDevice());
 	HR(m_phong_FX->OnLostDevice());
 	HR(m_spot_FX->OnLostDevice());
 }
@@ -212,7 +212,7 @@ void SkeletonClass::onResetDevice()
 	GfxStats::GetInstance()->onResetDevice();
 
 	//	Effects
-	HR(m_assignment4_FX->OnResetDevice());
+//	HR(m_assignment4_FX->OnResetDevice());
 	HR(m_phong_FX->OnResetDevice());
 	HR(m_spot_FX->OnResetDevice());
 
@@ -254,7 +254,7 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_O))
 		m_key_O_down = false;
 
-
+		//	Input to toggle	ENVIRONMENT REFLECTION on/off
 	if (gDInput->keyDown(DIK_R) && !m_key_R_down)
 	{
 		i_evir_reflect_on = !i_evir_reflect_on;
@@ -263,6 +263,7 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_R))
 		m_key_R_down = false;
 
+		//	Input to toggle NORMAL MAPPING on/off
 	if (gDInput->keyDown(DIK_N) && !m_key_N_down)
 	{
 		i_norm_mapping_on = !i_norm_mapping_on;
@@ -271,7 +272,8 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_N))
 		m_key_N_down = false;
 
-	if (gDInput->keyDown(DIK_NUMPADPLUS) && !m_key_pls_down)
+		//	Input for BLEND (-/+)
+	if ((gDInput->keyDown(DIK_EQUALS)) && !m_key_pls_down)
 	{
 		i_blend += 0.1f;
 		if (i_blend > 1)
@@ -280,9 +282,9 @@ void SkeletonClass::updateScene(float dt)
 		}
 		m_key_pls_down = true;
 	}
-	else if (!gDInput->keyDown(DIK_NUMPADPLUS))
+	else if (!gDInput->keyDown(DIK_EQUALS))
 		m_key_pls_down = false;
-	if (gDInput->keyDown(DIK_NUMPADMINUS) && !m_key_min_down)
+	if ((gDInput->keyDown(DIK_MINUS)) && !m_key_min_down)
 	{
 		i_blend -= 0.1f;
 		if (i_blend < 0)
@@ -291,9 +293,10 @@ void SkeletonClass::updateScene(float dt)
 		}
 		m_key_min_down = true;
 	}
-	else if (!gDInput->keyDown(DIK_NUMPADMINUS))
+	else if (!gDInput->keyDown(DIK_MINUS))
 		m_key_min_down = false;
 
+		//	Input for Normal Strength (A/S)
 	if (gDInput->keyDown(DIK_A) && !m_key_A_down)
 	{
 		i_norm_strength += 0.1f;
@@ -317,6 +320,7 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_S))
 		m_key_S_down = false;
 
+		//	Keys for SPECULAR COEFFIECIENT (1...7)
 	if (gDInput->keyDown(DIK_1) && !m_key_1_down)
 	{
 		i_spec_coefficient = 2;
@@ -327,21 +331,21 @@ void SkeletonClass::updateScene(float dt)
 	if (gDInput->keyDown(DIK_2) && !m_key_2_down)
 	{
 		i_spec_coefficient = 4;
-			m_key_2_down = true;
+		m_key_2_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_2))
-		m_key_1_down = false;
+		m_key_2_down = false;
 	if (gDInput->keyDown(DIK_3) && !m_key_3_down)
 	{
 		i_spec_coefficient = 8;
-			m_key_1_down = true;
+		m_key_3_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_3))
 		m_key_3_down = false;
 	if (gDInput->keyDown(DIK_4) && !m_key_4_down)
 	{
 		i_spec_coefficient = 16;
-			m_key_4_down = true;
+		m_key_4_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_4))
 		m_key_4_down = false;
@@ -361,7 +365,7 @@ void SkeletonClass::updateScene(float dt)
 		m_key_6_down = false;
 	if (gDInput->keyDown(DIK_7) && !m_key_7_down)
 	{
-		i_spec_coefficient = 16;
+		i_spec_coefficient = 128;
 		m_key_7_down = true;
 	}
 	else if (!gDInput->keyDown(DIK_7))
@@ -402,7 +406,8 @@ void SkeletonClass::drawScene()
 
 	HR(gd3dDevice->BeginScene());
 
-
+		//	draw environment map mesh
+	HR(m_envMap_mesh->DrawSubset(0));
 
 
     // Set render statws for the entire scene here:
@@ -443,13 +448,6 @@ void SkeletonClass::drawScene()
 
 
 
-
-		//	Set Environment Map Values
-
-
-
-
-
 		UINT numPasses = 0;
 		HR(m_current_effect->Begin(&numPasses, 0));
 
@@ -458,7 +456,8 @@ void SkeletonClass::drawScene()
 			//	set effet parameters
 			m_current_effect->SetTexture(mh_environmentMap, m_envMap_texture);
 
-		HR(m_envMap_mesh->DrawSubset(0));
+			//	Move this line of code above so that the mesh would ACTUALLY draw. Weird.
+//		HR(m_envMap_mesh->DrawSubset(0));
 
 		for (UINT i = 0; i < numPasses; ++i)
 		{
@@ -689,14 +688,16 @@ void SkeletonClass::buildAssignment4FX()
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
 
 
+	if (m_assignment4_FX != NULL)
+	{
+		//	Obtain the handles
+		obtainAssignment4Handles();
 
-	//	Obtain the handles
-	obtainPhongHandles();
-
-	HR(m_assignment4_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
-	HR(m_assignment4_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
-	HR(m_assignment4_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-	HR(m_assignment4_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
+		HR(m_assignment4_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
+		HR(m_assignment4_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
+		HR(m_assignment4_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
+		HR(m_assignment4_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
+	}
 }
 void SkeletonClass::obtainAssignment4Handles()
 {
