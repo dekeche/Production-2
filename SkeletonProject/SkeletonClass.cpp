@@ -89,7 +89,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	mConeMaterial = new BaseMaterial();
 
-	mConeMaterial->ConnectToEffect(m_spot_FX);
+	mConeMaterial->ConnectToEffect(m_assignment4_FX);
 	mConeMaterial->AddTexture(mp_texture);
 	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 

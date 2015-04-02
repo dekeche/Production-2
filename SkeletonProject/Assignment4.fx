@@ -118,6 +118,9 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 	// Transform light direction to tangent space.
 	float3 lightDirL = mul(float4(gLightVecW, 0.0f), gWorldInv);
 	outVS.LightDirT = mul(lightDirL, toTangentSpace);
+	outVS.normal = normalL;
+	outVS.tangent = tangentL;
+	outVS.binormal = binormalL;
 
 #endif
 	// Pass on texture coordinates to be interpolated
