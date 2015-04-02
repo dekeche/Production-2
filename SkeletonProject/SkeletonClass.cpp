@@ -86,6 +86,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	buildAssignment4FX();
 
+
+
 	mConeMaterial = new EnhancedMaterial();
 
 	mConeMaterial->ConnectToEffect(m_assignment4_FX);
@@ -147,7 +149,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_key_5_down = false;
 	m_key_6_down = false;
 	m_key_7_down = false;
-	m_current_effect = nullptr;
+	m_current_effect = m_assignment4_FX;
 
 
 	onResetDevice();
@@ -421,8 +423,8 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	}
 
-	//	Setup the rendering EFFECT
-		//	iterate between various shaders
+
+	//	set values on material
 	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient);
 
 	if (m_current_effect != nullptr)
