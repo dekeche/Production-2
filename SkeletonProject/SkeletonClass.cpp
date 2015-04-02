@@ -147,7 +147,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_key_5_down = false;
 	m_key_6_down = false;
 	m_key_7_down = false;
-	m_current_effect = nullptr;
+	m_current_effect = m_assignment4_FX;
 
 
 	onResetDevice();

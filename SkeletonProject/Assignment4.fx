@@ -116,8 +116,6 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 	outVS.toEyeT = mul(toEyeL, toTangentSpace);
 
 	// Transform light direction to tangent space.
-	float3 lightDirL = mul(float4(gLightVecW, 0.0f), gWorldInv);
-	outVS.LightDirT = mul(lightDirL, toTangentSpace);
 	outVS.normal = normalL;
 	outVS.tangent = tangentL;
 	outVS.binormal = binormalL;
@@ -138,29 +136,29 @@ float4 NormalMapPS(float3 normal : TEXCOORD0,
 float3 tangent : TEXCOORD1,
 float3 binormal : TEXCOORD2,
 float3 position : TEXCOORD3,
-float3 lightDir : TEXCOORD4,
-float3 viewDir : TEXCOORD5,
 float2 tex0 : TEXCOORD6) : COLOR
 {
 
 #if gNormalMappingOn
 	float3x3 TBN;
-	TBN[0] = normalize(tangent);
-	TBN[1] = normalize(binormal);
-	TBN[2] = normalize(normal);
+	TBN[0] = tangent;
+	TBN[1] = binormal;
+	TBN[2] = normal;
 	TBN = transpose(TBN);
 	normal = tex2D(NormalMapS, tex0);
 	normal = mul(TBN, normal);
+	return float4(1.0f, 0.0f, 0.0f, 1.0f);
 #endif
 
 	float3 toEye = normalize(gEyePosW - position);
-		float3 lightVecW = normalize(gLightPosW - position);
-		//	Compute reflection vector
-		//float3 r = reflect(-gLightVecW, normalW);
-		float3 r = reflect(gLightDirW, normal);
+	float3 lightVecW = normalize(gLightPosW - position);
+	
+	//	Compute reflection vector
+    //float3 r = reflect(-gLightVecW, normalW);
+	float3 r = reflect(gLightDirW, normal);
 
-		//	Determine how much specular light makes it's way into the eye(camera)
-		float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
+	//	Determine how much specular light makes it's way into the eye(camera)
+	float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
 
 	////	Determine diffuse light intensity that strikes the vertex
 	//float s = max(dot(gLightDirW, normalW), 0.0f);
@@ -172,6 +170,9 @@ float2 tex0 : TEXCOORD6) : COLOR
 		float3 diffuse = spot*(gDiffuseMtrl*gDiffuseLight).rgb;
 		float3 ambient = gAmbientMtrl*gAmbientLight;
 
+#if gEnvirnReflectionOn
+		float3 envMapTex = reflect(-toEyeW, normal);
+#endif
 		float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
 
 		return all_together;
