@@ -32,8 +32,6 @@ uniform extern float3 gLightPosW;
 //	Direction of the Light in the World
 uniform extern float3 gLightDirW;
 
-uniform extern float3 gAttenuation012;
-
 uniform extern bool gTextureOn;
 uniform extern texture gTex;
 uniform extern float  gSpotPower;

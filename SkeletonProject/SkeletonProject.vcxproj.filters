@@ -37,6 +37,9 @@
     <ClCompile Include="Teapot.cpp">
       <Filter>Sources\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="EnhancedMaterial.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h">

@@ -101,6 +101,7 @@
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />
+    <ClCompile Include="EnhancedMaterial.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Torus.cpp" />
     <ClCompile Include="Sphere.cpp" />

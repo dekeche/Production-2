@@ -36,6 +36,7 @@ public:
     BaseObject3D(void);
     ~BaseObject3D(void);
 
+
 	void setMaterial(BaseMaterial* mat){ m_Material = mat; }
 	void setEffect(ID3DXEffect* effect){ m_Material->ConnectToEffect(effect); }
     // Replace or add to the following code as you progress with the material

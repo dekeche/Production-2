@@ -37,7 +37,7 @@ uniform extern float3 gAttenuation012;
 uniform extern float gSpecReflectBlend;
 
 
-uniform extern float3 gNormalBlend;
+uniform extern float gNormalBlend;
 
 uniform extern bool gTextureOn;
 uniform extern bool gNormalMappingOn;

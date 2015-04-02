@@ -19,7 +19,7 @@
 #pragma once
 //=============================================================================
 #include "d3dApp.h"
-#include "BaseMaterial.h"
+#include "EnhancedMaterial.h"
 
 #include <vector>
 //=============================================================================
@@ -45,7 +45,7 @@ public:
 	void ChangeObject();
 
 private:
-	BaseMaterial *mConeMaterial;
+	EnhancedMaterial *mConeMaterial;
 
 	float mCameraRotationY;
 	float mCameraRotationX;
@@ -120,7 +120,7 @@ private:
 
 
 		//	HANDLES
-	D3DXHANDLE mh_Technique;				//	technique to use for the Shader
+	/*D3DXHANDLE mh_Technique;				//	technique to use for the Shader
 					//	For BEST simplicity, have the technique be called "Technique" unless stated otherwise
 	D3DXHANDLE mh_WVP;						//	world view projection matrix
 	D3DXHANDLE mh_WorldInverseTranspose;	//	Inverse of the World matrix
@@ -144,19 +144,18 @@ private:
 	D3DXHANDLE mh_textureOn;
 
 	D3DXHANDLE mh_environmentMap;
-		
-	
-		//	Function for SHADER
-	void buildPhongFX();
-	void obtainPhongHandles();
-	void buildSpotFX();
-	void obtainSpotHandles();
+
+	D3DXHANDLE mh_textureOn;
+	D3DXHANDLE mh_environmentMap;
+	D3DXHANDLE mh_environmentMap;*/
+
 		//	assignment4
 	void buildAssignment4FX();
-	void obtainAssignment4Handles();
+	void setAssignment4FX();
 
 
 	IDirect3DTexture9* mp_texture;
+	IDirect3DTexture9* mp_normal;
 
 
 
@@ -164,6 +163,7 @@ private:
 		//	Environment map
 			//	file path
 	std::string m_envMap_filepath = "Assets//cubeMap.dds";
+	std::string m_normalMap_filepath = "Assets//cubeMap.dds";
 			//	texture
 	IDirect3DCubeTexture9* m_envMap_texture = 0;
 			//	mesh

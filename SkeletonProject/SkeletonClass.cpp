@@ -58,8 +58,9 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//	Load Texture(s)
 		//	object textures
 	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &mp_texture));
-		//	environment map texture
+	HR(D3DXCreateTextureFromFile(gd3dDevice, m_normalMap_filepath.c_str(), &mp_normal));
 	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, m_envMap_filepath.c_str(), &m_envMap_texture));
+		//	environment map texture
 
 	//	Create Environment Map mesh/cube
 	HR(D3DXCreateBox(gd3dDevice, m_envMap_cubeSize, m_envMap_cubeSize, m_envMap_cubeSize, &m_envMap_mesh, NULL));
@@ -83,16 +84,16 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	m_spot_power = 16.0f;
 
-	buildSpotFX();
-	buildPhongFX();
 	buildAssignment4FX();
 
-	mConeMaterial = new BaseMaterial();
+	mConeMaterial = new EnhancedMaterial();
 
 	mConeMaterial->ConnectToEffect(m_assignment4_FX);
-	mConeMaterial->AddTexture(mp_texture);
-	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 
+	mConeMaterial->setTextures(mp_texture, mp_normal, m_envMap_texture);
+
+	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
+	mConeMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
 	BaseObject3D* temp;
@@ -165,8 +166,6 @@ SkeletonClass::~SkeletonClass()
 
 	//	Destroy effects
 	ReleaseCOM(m_assignment4_FX);
-	ReleaseCOM(m_phong_FX);
-	ReleaseCOM(m_spot_FX);
 	ReleaseCOM(mp_texture);
 
 	DestroyAllVertexDeclarations();
@@ -202,9 +201,9 @@ void SkeletonClass::onLostDevice()
 	GfxStats::GetInstance()->onLostDevice();
 	
 	//	Effects
-//	HR(m_assignment4_FX->OnLostDevice());
-	HR(m_phong_FX->OnLostDevice());
-	HR(m_spot_FX->OnLostDevice());
+	HR(m_assignment4_FX->OnLostDevice());
+	//HR(m_phong_FX->OnLostDevice());
+	//HR(m_spot_FX->OnLostDevice());
 }
 
 void SkeletonClass::onResetDevice()
@@ -212,9 +211,9 @@ void SkeletonClass::onResetDevice()
 	GfxStats::GetInstance()->onResetDevice();
 
 	//	Effects
-//	HR(m_assignment4_FX->OnResetDevice());
-	HR(m_phong_FX->OnResetDevice());
-	HR(m_spot_FX->OnResetDevice());
+	HR(m_assignment4_FX->OnResetDevice());
+	//HR(m_phong_FX->OnResetDevice());
+	//HR(m_spot_FX->OnResetDevice());
 
 	// The aspect ratio depends on the backbuffer dimensions, which can 
 	// possibly change after a reset.  So rebuild the projection matrix.
@@ -422,41 +421,16 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	}
 
-	ID3DXEffect* current;
 	//	Setup the rendering EFFECT
 		//	iterate between various shaders
-	m_Objects[m_currentobject_index]->setEffect(m_current_effect);
+	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient);
+
 	if (m_current_effect != nullptr)
 	{
-		HR(m_current_effect->SetBool(mh_textureOn, i_texture_on));
-		//	set technique
-		HR(m_current_effect->SetTechnique(mh_Technique));
-		//	set world view proj matrix
-		HR(m_current_effect->SetMatrix(mh_WVP, &(mWorld*mView*mProj)));
-
-		//	Set world inverse transpose matrix
-		D3DXMATRIX worldInverseTranspose;
-		D3DXMatrixInverse(&worldInverseTranspose, 0, &mWorld);
-		D3DXMatrixTranspose(&worldInverseTranspose, &worldInverseTranspose);
-		HR(m_current_effect->SetMatrix(mh_WorldInverseTranspose, &worldInverseTranspose));
-
-		//	Set values of World Light
-		HR(m_current_effect->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
-		HR(m_current_effect->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
-		HR(m_current_effect->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-		HR(m_current_effect->SetFloat(mh_spotPower, m_spot_power));
-
-
 
 		UINT numPasses = 0;
 		HR(m_current_effect->Begin(&numPasses, 0));
-
-		//	Draw Environment Map (first)
-		if (i_evir_reflect_on && mh_environmentMap != NULL)
-			//	set effet parameters
-			m_current_effect->SetTexture(mh_environmentMap, m_envMap_texture);
-
-			//	Move this line of code above so that the mesh would ACTUALLY draw. Weird.
+		//	Move this line of code above so that the mesh would ACTUALLY draw. Weird.
 //		HR(m_envMap_mesh->DrawSubset(0));
 
 		for (UINT i = 0; i < numPasses; ++i)
@@ -525,17 +499,7 @@ void SkeletonClass::buildViewMtx()
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
-
-	if (m_current_effect != nullptr)
-	{
-		HR(m_current_effect->SetValue(mh_eyePos, &pos, sizeof(D3DXVECTOR3)));
-
-		// Spotlight position is the same as the camera position.
-		HR(m_current_effect->SetValue(mh_LightPosW, &pos, sizeof(D3DXVECTOR3)));
-		D3DXVECTOR3 lightDir = target - pos;
-		D3DXVec3Normalize(&lightDir, &lightDir);
-		HR(m_current_effect->SetValue(mh_LightDirectW, &lightDir, sizeof(D3DXVECTOR3)));
-	}
+	mConeMaterial->setViewMtx(pos, target, up);
 }
 
 void SkeletonClass::buildProjMtx()
@@ -560,121 +524,6 @@ void SkeletonClass::ChangeObject(void)
 	m_key_O_down = true;
 }
 
-
-void SkeletonClass::buildPhongFX()
-{
-	//	Buffer for any errors
-	ID3DXBuffer* errors = 0;
-
-	//	Create FX from .fx file
-	HR(D3DXCreateEffectFromFile(gd3dDevice, "phong.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_phong_FX, &errors));
-
-	//	Check for & display any errors
-	if (errors)
-		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
-
-
-
-	//	Obtain the handles
-	obtainPhongHandles();
-
-	HR(m_phong_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
-	HR(m_phong_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
-	HR(m_phong_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-	HR(m_phong_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
-
-}
-void SkeletonClass::obtainPhongHandles()
-{
-	//	set technique
-	mh_Technique = m_phong_FX->GetTechniqueByName("PhongTech");
-
-		//	set world view proj matrix
-	mh_WVP						= m_phong_FX->GetParameterByName(0, "gWVP");
-		//	set world inverse transpose
-	mh_WorldInverseTranspose	= m_phong_FX->GetParameterByName(0, "gWorldInverseTranspose");
-		//	eye/camera position
-	mh_eyePos					= m_phong_FX->GetParameterByName(0, "gEyePosW");
-		//	world matrix
-	mh_World					= m_phong_FX->GetParameterByName(0, "gWorld");
-		//	Light components
-	mh_ambientLight				= m_phong_FX->GetParameterByName(0, "gAmbientLight");
-	mh_diffuseLight				= m_phong_FX->GetParameterByName(0, "gDiffuseLight");
-	mh_specularLight			= m_phong_FX->GetParameterByName(0, "gSpecLight");
-
-	mh_spotPower				= m_phong_FX->GetParameterByName(0, "gSpotPower");
-
-		//	Light as a Vector
-	mh_LightVecW				= m_phong_FX->GetParameterByName(0, "gLightVecW");
-
-		//	Light as a position & direction
-	mh_LightPosW				= m_phong_FX->GetParameterByName(0, "gLightPosW");
-	mh_LightDirectW				= m_phong_FX->GetParameterByName(0, "gLightDirW");
-
-		//	attuenuation of light
-	mh_attenuation				= m_phong_FX->GetParameterByName(0, "gAttenuation012");
-
-	mh_textureOn = m_phong_FX->GetParameterByName(0, "gTextureOn");
-
-}
-
-
-void SkeletonClass::buildSpotFX()
-{
-	//	Buffer for any errors
-	ID3DXBuffer* errors = 0;
-
-	//	Create FX from .fx file
-	HR(D3DXCreateEffectFromFile(gd3dDevice, "spotlight.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_spot_FX, &errors));
-
-	//	Check for & display any errors
-	if (errors)
-		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
-
-	//	Obtain the handles
-	obtainSpotHandles();
-
-	D3DXVECTOR3 attenuation012 = D3DXVECTOR3(1.0f,0.0f,0.0f);
-	HR(m_spot_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
-	HR(m_spot_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
-	HR(m_spot_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-	HR(m_spot_FX->SetValue(mh_attenuation, &attenuation012, sizeof(D3DXVECTOR3)));
-}
-void SkeletonClass::obtainSpotHandles()
-{
-	//	set technique
-	mh_Technique = m_spot_FX->GetTechniqueByName("SpotlightTech");
-
-	//	set world view proj matrix
-	mh_WVP = m_spot_FX->GetParameterByName(0, "gWVP");
-	//	set world inverse transpose
-	mh_WorldInverseTranspose = m_spot_FX->GetParameterByName(0, "gWorldInvTrans");
-	//	eye/camera position
-	mh_eyePos = m_spot_FX->GetParameterByName(0, "gEyePosW");
-	//	world matrix
-	mh_World = m_spot_FX->GetParameterByName(0, "gWorld");
-	//	Light components
-	mh_ambientLight = m_spot_FX->GetParameterByName(0, "gAmbientLight");
-	mh_diffuseLight = m_spot_FX->GetParameterByName(0, "gDiffuseLight");
-	mh_specularLight = m_spot_FX->GetParameterByName(0, "gSpecLight");
-
-	//	Light as a Vector
-	//mh_LightVecW = m_spot_FX->GetParameterByName(0, "gLightVecW");
-
-	//	Light as a position & direction
-	mh_LightPosW = m_spot_FX->GetParameterByName(0, "gLightPosW");
-	mh_LightDirectW = m_spot_FX->GetParameterByName(0, "gLightDirW");
-
-	//	attuenuation of light
-	mh_attenuation = m_spot_FX->GetParameterByName(0, "gAttenuation012");
-
-	//	power of the spotlight
-	mh_spotPower = m_spot_FX->GetParameterByName(0, "gSpotPower");
-
-	mh_textureOn = m_spot_FX->GetParameterByName(0, "gTextureOn");
-}
-
-
 void SkeletonClass::buildAssignment4FX()
 {
 	//	Buffer for any errors
@@ -686,53 +535,5 @@ void SkeletonClass::buildAssignment4FX()
 	//	Check for & display any errors
 	if (errors)
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
-
-
-	if (m_assignment4_FX != NULL)
-	{
-		//	Obtain the handles
-		obtainAssignment4Handles();
-
-		HR(m_assignment4_FX->SetValue(mh_ambientLight, &m_Light_ambient, sizeof(D3DXCOLOR)));
-		HR(m_assignment4_FX->SetValue(mh_diffuseLight, &m_Light_diffuse, sizeof(D3DXCOLOR)));
-		HR(m_assignment4_FX->SetValue(mh_specularLight, &m_Light_specular, sizeof(D3DXCOLOR)));
-		HR(m_assignment4_FX->SetValue(mh_LightVecW, &m_Light_vector_W, sizeof(D3DXVECTOR3)));
-	}
-}
-void SkeletonClass::obtainAssignment4Handles()
-{
-	//	set technique
-	mh_Technique = m_assignment4_FX->GetTechniqueByName("Assignment4Tech");
-
-	//	set world view proj matrix
-	mh_WVP = m_assignment4_FX->GetParameterByName(0, "gWVP");
-	//	set world inverse transpose
-	mh_WorldInverseTranspose = m_assignment4_FX->GetParameterByName(0, "gWorldInverseTranspose");
-	//	eye/camera position
-	mh_eyePos = m_assignment4_FX->GetParameterByName(0, "gEyePosW");
-	//	world matrix
-	mh_World = m_assignment4_FX->GetParameterByName(0, "gWorld");
-	//	Light components
-	mh_ambientLight = m_assignment4_FX->GetParameterByName(0, "gAmbientLight");
-	mh_diffuseLight = m_assignment4_FX->GetParameterByName(0, "gDiffuseLight");
-	mh_specularLight = m_assignment4_FX->GetParameterByName(0, "gSpecLight");
-
-	mh_spotPower = m_assignment4_FX->GetParameterByName(0, "gSpotPower");
-
-	//	Light as a Vector
-	mh_LightVecW = m_assignment4_FX->GetParameterByName(0, "gLightVecW");
-
-	//	Light as a position & direction
-	mh_LightPosW = m_assignment4_FX->GetParameterByName(0, "gLightPosW");
-	mh_LightDirectW = m_assignment4_FX->GetParameterByName(0, "gLightDirW");
-
-	//	attuenuation of light
-	mh_attenuation = m_assignment4_FX->GetParameterByName(0, "gAttenuation012");
-
-	mh_textureOn = m_assignment4_FX->GetParameterByName(0, "gTextureOn");
-
-
-	//	Environment map handle
-	mh_environmentMap = m_assignment4_FX->GetParameterByName(0, "gEnvironment");
 
 }
