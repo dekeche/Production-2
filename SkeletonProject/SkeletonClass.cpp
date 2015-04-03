@@ -57,7 +57,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	//	Load Texture(s)
 		//	object textures
-	HR(D3DXCreateTextureFromFile(gd3dDevice, "texture.jpg", &mp_texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, /*"texture.jpg"*/"Assets//pic.png", &mp_texture));
 	HR(D3DXCreateTextureFromFile(gd3dDevice, m_normalMap_filepath.c_str(), &mp_normal));
 	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, m_envMap_filepath.c_str(), &m_envMap_texture));
 		//	environment map texture
@@ -72,9 +72,9 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 	m_Light_vector_W = D3DXVECTOR3(1.0, 1.0f, 1.0f);
-		//	Red
-	m_Light_diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, m_Light_Diffuse_A);
-	m_Light_ambient = RED * 0.4f;
+		//	White
+	m_Light_diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_Light_Diffuse_A);
+	m_Light_ambient = WHITE;//RED * 0.4f;
 		//	White
 	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_Light_Specular_A);
 
@@ -85,6 +85,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_spot_power = 16.0f;
 
 	buildAssignment4FX();
+
+
 
 	mConeMaterial = new EnhancedMaterial();
 
@@ -374,7 +376,7 @@ void SkeletonClass::updateScene(float dt)
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY += gDInput->mouseDY() / 100.0f;
 	mCameraRotationX += gDInput->mouseDX() / 100.0f;
-	mCameraRadius += gDInput->mouseDZ() / 100.0f;
+	mCameraRadius -= gDInput->mouseDZ() / 100.0f;
 
 	// If we rotate over 360 degrees, just roll back to 0
 	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
@@ -408,7 +410,6 @@ void SkeletonClass::drawScene()
 		//	draw environment map mesh
 //	HR(m_envMap_mesh->DrawSubset(0));
 
-
     // Set render statws for the entire scene here:
 
 	//	Check if we're SOLID or WIRE frame
@@ -421,8 +422,8 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	}
 
-	//	Setup the rendering EFFECT
-		//	iterate between various shaders
+
+	//	set values on material
 	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient);
 
 	if (m_current_effect != nullptr)
