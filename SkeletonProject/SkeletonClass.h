@@ -99,7 +99,7 @@ private:
 		//	Solid & WireFrame
 	bool i_Solid_frame = true;
 		//	With/Without Texture
-	bool i_texture_on = false;
+	bool i_texture_on = true;
 		//	Environment Reflection
 	bool i_evir_reflect_on = false;
 	//	Normal mapping
@@ -162,8 +162,8 @@ private:
 	//	Assignment 4
 		//	Environment map
 			//	file path
-	std::string m_envMap_filepath = "Assets//cubeMap.dds";
-	std::string m_normalMap_filepath = "Assets//cubeMap.dds";
+	std::string m_envMap_filepath = "Assets//Islands.dds";
+	std::string m_normalMap_filepath = "Assets//Islands.dds";
 			//	texture
 	IDirect3DCubeTexture9* m_envMap_texture = 0;
 			//	mesh
