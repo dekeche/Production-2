@@ -71,5 +71,6 @@ void EnhancedMaterial::setValues(bool textureOn, bool normalOn, bool envReflecOn
 
 	HR(m_Effect->SetFloat(m_gNormalBlend, blendNormal));
 	HR(m_Effect->SetFloat(m_gSpecReflectBlend, reflectBlend));
+	HR(m_Effect->SetFloat(m_SpecPowerHandel, specCo));
 	HR(m_Effect->CommitChanges());
 };

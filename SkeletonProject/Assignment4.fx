@@ -67,7 +67,7 @@ sampler EnvMapS = sampler_state
 sampler TexS = sampler_state
 {
 	Texture = <gTex>;
-	MinFilter = ANISOTROPIC;
+	MinFilter = LINEAR;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
 	AddressV = WRAP;
@@ -124,7 +124,7 @@ float4 NormalMapPS(float3 normal : TEXCOORD0,
 float3 tangent : TEXCOORD1,
 float3 binormal : TEXCOORD2,
 float3 position : TEXCOORD3,
-float2 tex0 : TEXCOORD6) : COLOR
+float2 tex0 : TEXCOORD4) : COLOR
 {
 
 	if (gNormalMappingOn)
@@ -169,8 +169,8 @@ float2 tex0 : TEXCOORD6) : COLOR
 	if (gTextureOn)
 	{
 		float3 texColor = tex2D(TexS, tex0).rgb;
-		float3 diff = all_together.rgb*texColor;
-		return float4(diff, all_together.a);
+			float3 diff = all_together.rgb*texColor;
+			return float4(diff, 1.0f);
 	}
 		return all_together;
 }
