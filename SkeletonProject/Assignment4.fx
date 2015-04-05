@@ -52,7 +52,8 @@ struct OutputVS
 	float3 tangent : TEXCOORD1;
 	float3 binormal : TEXCOORD2;
 	float3 position : TEXCOORD3;
-	float2 tex0 : TEXCOORD4;
+	float3 trueNormal : TEXCOORD4;
+	float2 tex0 : TEXCOORD5;
 };
 
 sampler EnvMapS = sampler_state
@@ -94,24 +95,25 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 	//	Transform the normal to be in world space
 	outVS.normal = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
 	//	NORMALIZE IT
-	outVS.normal = normalize(outVS.normal);
+	outVS.trueNormal = outVS.normal = normalize(outVS.normal);
 	outVS.tangent = normalize(tangentL);
 	outVS.binormal = normalize(binormalL);
 
 	//	Transform vertex position to world space
 	outVS.position = mul(float4(posL, 1.0f), gWorld).xyz;
 
+	//if normal mapping is on, set all values for creation of TBN matrix.
 	if (gNormalMappingOn)
 	{
-		outVS.normal = normalL;
-		outVS.tangent = tangentL;
-		outVS.binormal = binormalL;
+		outVS.normal = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
+		outVS.tangent = mul(float4(tangentL, 0.0f), gWorldInverseTranspose).xyz;
+		outVS.binormal = mul(float4(binormalL, 0.0f), gWorldInverseTranspose).xyz;
 	}
 
-	// Transform light direction to tangent space.
-	// Pass on texture coordinates to be interpolated
-	// in rasterization.
+	// not used in shader, but breaks if absent.
 	outVS.posH = mul(float4(posL, 1.0f), gWVP);
+
+	//transfer texture coordinate
 	outVS.tex0 = tex0;
 	//	return the output & continue into PS
 	return outVS;
@@ -125,40 +127,55 @@ float4 NormalMapPS(float3 normal : TEXCOORD0,
 float3 tangent : TEXCOORD1,
 float3 binormal : TEXCOORD2,
 float3 position : TEXCOORD3,
-float2 tex0 : TEXCOORD4) : COLOR
+float3 trueNormal : TEXCOORD4,
+float2 tex0 : TEXCOORD5) : COLOR
 {
+	//create local values for Mtrl.
 	float4 specMtrl = gSpecMtrl;
 	float4 diffMtrl = gDiffuseMtrl;
 	float4 ambiMtrl = gAmbientMtrl;
 
+	//if texture is on, reset local Mtrl values to texture values.
 	if (gTextureOn)
 	{
+		//get texture color.
 		float4 texColor = tex2D(TexS, tex0);
 		specMtrl = texColor;
 		diffMtrl = texColor;
 		ambiMtrl = texColor;
 	}
 
+	//if normal mapping is on, reset normal to normal map
 	if (gNormalMappingOn)
 	{
+		//create Tangent, Binormal, Normal matrix
 		float3x3 TBN;
 		TBN[0] = tangent;
 		TBN[1] = binormal;
 		TBN[2] = normal;
-		TBN = transpose(TBN);
-		float3 normalT = tex2D(NormalMapS, tex0);
-		normalT = 2.0f*normalT - 1.0f;
-		normalT = normalize(normalT);
-		normalT = (normalT*(gNormalBlend)+normal*(1 - gNormalBlend));
-		normal = mul(TBN, normalT);
+
+		//get normal at position.
+		normal = tex2D(NormalMapS, tex0);
+		//change to [-1,1] range
+		normal = 2.0f*normal - 1.0f;
+		//normalize
+		//normal = mul(TBN, normal);
+		normal = normalize(normal);
+		//calculate blend between original normal and this, Strength of the normal
+		normal = ((normal*(gNormalBlend))+(trueNormal*(1.0f - gNormalBlend)));
+		//normal = normalize(normalTest);
+
+		//set normal to world space.
 	}
 
+	//calculate vector to eye from position.
 	float3 toEye = normalize(gEyePosW - position);
+	//calculate the light vector.
 	float3 lightVecW = normalize(gLightPosW - position);
 	
 	//	Compute reflection vector
     //float3 r = reflect(-gLightVecW, normalW);
-	float3 r = reflect(gLightDirW, normal);
+	float3 r = reflect(-gLightDirW, normal);
 
 	//	Determine how much specular light makes it's way into the eye(camera)
 	float t = pow(max(dot(r, toEye), 0.0f), gSpecPower);
@@ -174,25 +191,27 @@ float2 tex0 : TEXCOORD4) : COLOR
 	float3 diffuse = spot*(diffMtrl*gDiffuseLight).rgb;
 	float3 ambient = ambiMtrl*gAmbientLight;
 
+	//if environment reflection, calculate recflection
 	if (gEnvirnReflectionOn)
 	{
+		//get reflect direction.
 		float3 envMapTex = reflect(-toEye, normal);
+		//get reflect color.
 		float3 reflectColor = texCUBE(EnvMapS, envMapTex);
+		//calculate reflect blend with specular
 		spec = spec*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
+
+		//if also blending diffuse, blend diffuse.
 		if (gRecflectDiffuseOn)
 		{
 			diffuse = diffuse*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
 		}
 	}
+	//calculate final color.
 	float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
 
-	//if (gTextureOn)
-	//{
-	//	float3 texColor = tex2D(TexS, tex0).rgb;
-	//		float3 diff = all_together.rgb*texColor;
-    //		return float4(diff, 1.0f);
-	//}
-	return all_together;
+	//return color.
+    return float4(spec,1.0f);//all_together;
 }
 
 technique Assignment4Tech

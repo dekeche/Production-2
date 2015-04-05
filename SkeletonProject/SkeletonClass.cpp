@@ -73,10 +73,10 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	m_Light_vector_W = D3DXVECTOR3(1.0, 1.0f, 1.0f);
 		//	White
-	m_Light_diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_Light_Diffuse_A);
+	m_Light_diffuse = WHITE;
 	m_Light_ambient = WHITE;//RED * 0.4f;
 		//	White
-	m_Light_specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_Light_Specular_A);
+	m_Light_specular = WHITE;
 
 	//	set original Specular & Diffuse
 	m_Light_OriginalSpec = m_Light_specular;
@@ -94,7 +94,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	mConeMaterial->setTextures(mp_texture, mp_normal, m_envMap_texture);
 
-	mConeMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
+	mConeMaterial->setMat(RED, GREEN, BLUE, 8.0f);
 	mConeMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
