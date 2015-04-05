@@ -379,14 +379,17 @@ void SkeletonClass::updateScene(float dt)
 	mCameraRadius -= gDInput->mouseDZ() / 100.0f;
 
 	// If we rotate over 360 degrees, just roll back to 0
-	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
-		mCameraRotationY = 0.0f;
+	if( mCameraRotationY > 2.0f * D3DX_PI ) 
+		mCameraRotationY = gDInput->mouseDY() / 100.0f;
+
+	if (mCameraRotationY < 0.0f)
+		mCameraRotationY = 2.0f * D3DX_PI;
 
 	// Don't let radius get too small.
-	if (fabsf(mCameraRotationX) >= 2.0f * D3DX_PI)
+	if (mCameraRotationX > 2.0f * D3DX_PI)
 		mCameraRotationX = 0.0f;
 
-	if (fabsf(mCameraRotationX) < 0.0f)
+	if (mCameraRotationX < 0.0f)
 		mCameraRotationX = 2.0f * D3DX_PI;
 
 
@@ -485,20 +488,28 @@ void SkeletonClass::drawScene()
 
 void SkeletonClass::buildViewMtx()
 {
-	float z = mCameraRadius *sinf(mCameraRotationX);
-	float xyRadius = mCameraRadius* cosf(mCameraRotationX);
-	float x = xyRadius *cosf(mCameraRotationY);
-	float y = xyRadius *sinf(mCameraRotationY);
+	float y = mCameraRadius *cosf(mCameraRotationY);
+	float x = mCameraRadius *sinf(mCameraRotationY)*sinf(mCameraRotationX);
+	float z = mCameraRadius *sinf(mCameraRotationY)*cosf(mCameraRotationX);
 
-	if (mCameraRotationX >= D3DX_PI/* && mCameraRotationX < 3 * D3DX_PI/4*/)
+	float upVec = 1.0f;
+	float rightVec = 0.0f;
+	if (mCameraRotationY > D3DX_PI && mCameraRotationY < 2.0f * D3DX_PI/* && mCameraRotationX < 3 * D3DX_PI/4*/)
 	{
-		y = -y;
+		upVec = -upVec;
+		//y = -y;
 		//xyRadius = -xyRadius;
 		//mCameraRotationX = 2;
 	}
+	else if (mCameraRotationY == 0)
+	{
+		upVec = 0;
+		rightVec = -1.0f;
+	}
+
 	D3DXVECTOR3 pos(x, y, z);
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
+	D3DXVECTOR3 up(0.0f, upVec, rightVec);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
 	mConeMaterial->setViewMtx(pos, target, up);
 }
