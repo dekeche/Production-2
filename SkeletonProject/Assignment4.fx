@@ -42,6 +42,7 @@ uniform extern float gNormalBlend;
 uniform extern bool gTextureOn;
 uniform extern bool gNormalMappingOn;
 uniform extern bool gEnvirnReflectionOn;
+uniform extern bool gRecflectDiffuseOn;
 
 
 struct OutputVS
@@ -162,7 +163,8 @@ float2 tex0 : TEXCOORD4) : COLOR
 	////	Determine diffuse light intensity that strikes the vertex
 	//float s = max(dot(gLightDirW, normalW), 0.0f);
 	//	Spotlight factor
-	float spot = pow(max(dot(-lightVecW, gLightDirW), 0.0f), gSpotPower);
+	// 0.5f is spot power.
+	float spot = pow(max(dot(-lightVecW, gLightDirW), 0.0f), 0.5f);
 
 	//	Compute the ambient, diffuse, and specular terms respecitively.
 	float3 spec = t*(specMtrl*gSpecLight).rgb;
@@ -174,7 +176,10 @@ float2 tex0 : TEXCOORD4) : COLOR
 		float3 envMapTex = reflect(-toEye, normal);
 		float3 reflectColor = texCUBE(EnvMapS, envMapTex);
 		spec = spec*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
-		diffuse = diffuse*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
+		if (gRecflectDiffuseOn)
+		{
+			diffuse = diffuse*(gSpecReflectBlend)+reflectColor*(1 - gSpecReflectBlend);
+		}
 	}
 	float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
 

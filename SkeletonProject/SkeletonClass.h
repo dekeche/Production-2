@@ -64,7 +64,7 @@ private:
 	D3DXCOLOR m_Light_specular;
 
 	//	Power of the Spotlight
-	float m_spot_power;
+	float m_spot_power = 0.5f;
 
 	//	variables for toggling Specular & Diffuse Light components
 	float m_Light_Specular_A = 1.0f;
