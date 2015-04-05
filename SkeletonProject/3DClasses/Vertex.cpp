@@ -75,4 +75,5 @@ void DestroyAllVertexDeclarations()
 	ReleaseCOM(VertexCol::Decl);
 	ReleaseCOM(VertexPN::Decl);
 	ReleaseCOM(VertexPNT::Decl);
+	ReleaseCOM(VertexNMap::Decl);
 }

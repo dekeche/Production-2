@@ -43,20 +43,27 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 	{
 		D3DXVECTOR3 p = vertices[i].pos;
 
-		vertices[i].tex0.x = p.x;
-		vertices[i].tex0.y = p.y;
+		float theta = atan2f(p.z, p.x) + D3DX_PI;
+		float phi = acosf(p.y / sqrtf(p.x*p.x + p.y*p.y + p.z*p.z));
+
+		float u = theta / (2.0f*(D3DX_PI));
+		float v = phi / D3DX_PI;
+
+		vertices[i].tex0.x = u;
+		vertices[i].tex0.y = v;
 	}
 
 	HR(clone->UnlockVertexBuffer());
 
-	HR(clone->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, elements, gd3dDevice, &m_MeshObject));
-
-	HR(D3DXComputeTangentFrameEx(clone, D3DDECLUSAGE_TEXCOORD, 0,
+	ID3DXMesh* TNB;
+	HR(clone->CloneMesh(D3DXMESH_MANAGED, elements, gd3dDevice, &TNB));
+	ReleaseCOM(clone);
+	HR(D3DXComputeTangentFrameEx(TNB, D3DDECLUSAGE_TEXCOORD, 0,
 		D3DDECLUSAGE_BINORMAL, 0, D3DDECLUSAGE_TANGENT, 0,
 		D3DDECLUSAGE_NORMAL, 0, 0, 0, 0.01f, 0.25f, 0.01f,
-		&clone,0));
-	ReleaseCOM(clone);
+		&m_MeshObject, 0));
 
+	ReleaseCOM(TNB);
 	int mVerts = m_MeshObject->GetNumVertices();
 	int mTris = m_MeshObject->GetNumFaces();
 	GfxStats::GetInstance()->addVertices(mVerts);
