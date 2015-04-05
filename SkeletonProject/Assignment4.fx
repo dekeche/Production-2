@@ -146,8 +146,11 @@ float2 tex0 : TEXCOORD4) : COLOR
 		TBN[1] = binormal;
 		TBN[2] = normal;
 		TBN = transpose(TBN);
-		normal = tex2D(NormalMapS, tex0);
-		normal = mul(TBN, normal);
+		float3 normalT = tex2D(NormalMapS, tex0);
+		normalT = 2.0f*normalT - 1.0f;
+		normalT = normalize(normalT);
+		normalT = (normalT*(gNormalBlend)+normal*(1 - gNormalBlend));
+		normal = mul(TBN, normalT);
 	}
 
 	float3 toEye = normalize(gEyePosW - position);
