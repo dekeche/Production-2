@@ -273,6 +273,16 @@ void SkeletonClass::updateScene(float dt)
 	else if (!gDInput->keyDown(DIK_N))
 		m_key_N_down = false;
 
+		//	Input to toggle Diffuse/Reflect on/off
+	if (gDInput->keyDown(DIK_E) && !m_key_E_down)
+	{
+		i_reflect_diffuse_on = !i_reflect_diffuse_on;
+		m_key_E_down = true;
+	}
+	else if (!gDInput->keyDown(DIK_E))
+		m_key_E_down = false;
+
+
 		//	Input for BLEND (-/+)
 	if ((gDInput->keyDown(DIK_EQUALS)) && !m_key_pls_down)
 	{
@@ -427,7 +437,7 @@ void SkeletonClass::drawScene()
 
 
 	//	set values on material
-	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient);
+	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
 
 	if (m_current_effect != nullptr)
 	{
@@ -477,7 +487,7 @@ void SkeletonClass::drawScene()
     GfxStats::GetInstance()->display();
 
 	//	display UI help
-	GfxStats::GetInstance()->displayAssignment4(i_blend, i_norm_strength, i_spec_coefficient, i_texture_on, i_Solid_frame, i_evir_reflect_on, i_norm_mapping_on);
+	GfxStats::GetInstance()->displayAssignment4(i_blend, i_norm_strength, i_spec_coefficient, i_texture_on, i_Solid_frame, i_evir_reflect_on, i_norm_mapping_on, i_reflect_diffuse_on);
 
 	HR(gd3dDevice->EndScene());
 

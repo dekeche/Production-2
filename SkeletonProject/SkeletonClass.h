@@ -82,6 +82,7 @@ private:
 	bool m_key_O_down = false;
 	bool m_key_R_down = false;
 	bool m_key_N_down = false;
+	bool m_key_E_down = false;
 	bool m_key_min_down = false;
 	bool m_key_pls_down = false;
 	bool m_key_A_down = false;
@@ -110,6 +111,8 @@ private:
 	float i_norm_strength = 0;
 	//	spec coefficient
 	int i_spec_coefficient = 2;
+		//	Reflection & Diffuse blend
+	bool i_reflect_diffuse_on = false;
 
 	//	Shaders
 	ID3DXEffect* m_current_effect;

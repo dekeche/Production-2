@@ -36,6 +36,7 @@ protected:
 	D3DXHANDLE          m_gTextureOn;
 	D3DXHANDLE          m_gNormalMappingOn;
 	D3DXHANDLE          m_gEnvirnReflectionOn;
+	D3DXHANDLE			m_gDiffuseReflectionOn;
 
 public:
 	EnhancedMaterial(void) :BaseMaterial(){};
@@ -45,7 +46,7 @@ public:
 	void setLight(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, D3DXVECTOR3 vect);
 	void setViewMtx(D3DXVECTOR3 pos, D3DXVECTOR3 target, D3DXVECTOR3 up);
 	void setTextures(IDirect3DTexture9* texture, IDirect3DTexture9* normal,IDirect3DCubeTexture9* reflection);
-	void setValues(bool textureOn, bool normalOn, bool envReflecOn, float blendNormal, float reflectBlend, float specCo);
+	void setValues(bool textureOn, bool normalOn, bool envReflecOn, float blendNormal, float reflectBlend, float specCo, bool diffuseReflectOn);
 };
 //=============================================================================
 

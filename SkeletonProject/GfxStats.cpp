@@ -124,10 +124,10 @@ void GfxStats::display()
 
 
 // Display UI choices/help 
-void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef, bool pTextureToggle, bool pSolidToggle, bool pEnvReflectToggle, bool pNormalMapToggle)
+void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef, bool pTextureToggle, bool pSolidToggle, bool pEnvReflectToggle, bool pNormalMapToggle, bool pDiffuseReflectToggle)
 {
 	//	Make static so memory is not allocated every frame
-		static char v_buffer[500];
+		static char v_buffer[600];
 
 	//	set message
 	sprintf_s(v_buffer,
@@ -136,6 +136,7 @@ void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef,
 		"\nO -- Switch b / t Rendering Objects\n"
 		"\nR -- Switch Environment Reflection On / Off\nEnvironment Reflection is %s\n"
 		"\nN -- Switch Normal Mapping On/Off\nNormal Mapping is %s\n"
+		"\nE -- Switch Diffuse/Reflection blend On/Off\nDiffuse Blend is %s\n"
 		"\n+/- -- Increment / Decrement Blend b / t Reflection & Specular\n"
 		"Current Blend : %.1f\n"
 		"\nA/S -- Increment / Decrement Strength of Normal\n"
@@ -146,6 +147,7 @@ void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef,
 		   , (pTextureToggle ? "on" : "off")
 		   , (pEnvReflectToggle ? "on" : "off")
 		   , (pNormalMapToggle ? "on" : "off")
+		   , (pDiffuseReflectToggle ? "on" : "off")
 		   , pRSBlend, pNormStr, pSpecCoef);
 
 	RECT v_R = { 5, 80, 0, 0 };

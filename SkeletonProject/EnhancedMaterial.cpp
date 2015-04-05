@@ -37,6 +37,7 @@ void EnhancedMaterial::ConnectToEffect(ID3DXEffect* effect)
 		m_gTextureOn = m_Effect->GetParameterByName(0, "gTextureOn");
 		m_gNormalMappingOn = m_Effect->GetParameterByName(0, "gNormalMappingOn");
 		m_gEnvirnReflectionOn = m_Effect->GetParameterByName(0, "gEnvirnReflectionOn");
+		m_gDiffuseReflectionOn = m_Effect->GetParameterByName(0, "gRecflectDiffuseOn");
 	}
 };
 void EnhancedMaterial::setViewMtx(D3DXVECTOR3 pos, D3DXVECTOR3 target, D3DXVECTOR3 up)
@@ -63,14 +64,14 @@ void EnhancedMaterial::setTextures(IDirect3DTexture9* texture, IDirect3DTexture9
 	HR(m_Effect->SetTexture(m_gEnvironment, reflection));
 	HR(m_Effect->CommitChanges());
 };
-void EnhancedMaterial::setValues(bool textureOn, bool normalOn, bool envReflecOn, float blendNormal, float reflectBlend, float specCo)
+void EnhancedMaterial::setValues(bool textureOn, bool normalOn, bool envReflecOn, float blendNormal, float reflectBlend, float specCo, bool diffuseReflectOn)
 {
 	HR(m_Effect->SetBool(m_gTextureOn, textureOn));
 	HR(m_Effect->SetBool(m_gNormalMappingOn, normalOn));
 	HR(m_Effect->SetBool(m_gEnvirnReflectionOn, envReflecOn));
+	HR(m_Effect->SetBool(m_gDiffuseReflectionOn, diffuseReflectOn));
 
 	HR(m_Effect->SetFloat(m_gNormalBlend, blendNormal));
 	HR(m_Effect->SetFloat(m_gSpecReflectBlend, reflectBlend));
 	HR(m_Effect->SetFloat(m_SpecPowerHandel, specCo));
-	HR(m_Effect->CommitChanges());
 };
