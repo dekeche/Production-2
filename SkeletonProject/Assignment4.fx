@@ -211,7 +211,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 	float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
 
 	//return color.
-    return float4(spec,1.0f);//all_together;
+    return all_together;
 }
 
 technique Assignment4Tech
