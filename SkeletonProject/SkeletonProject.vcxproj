@@ -118,6 +118,7 @@
     <ClInclude Include="EnhancedMaterial.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
+    <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Torus.h" />
