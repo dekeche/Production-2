@@ -1,11 +1,21 @@
 #pragma once
-#include "PlanetSet.h"
+#include "Planetoid.h"
 class SolarSystem
 {
 public:
 	SolarSystem();
 	~SolarSystem();
 
-private:
+	void create();
+	void update(float dt);
+	void render();
 
+	void GoDownLevel();
+	void GoUpLevel();
+	void NextObject();
+	void PrevObject();
+private:
+	Planetoid* mpBase;
+	std::vector<int> mLevel;
+	Planetoid* mpCurrent;
 };

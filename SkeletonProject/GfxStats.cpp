@@ -132,7 +132,8 @@ void GfxStats::displayAssignment4(float pRSBlend, float pNormStr, int pSpecCoef,
 	//	set message
 	sprintf_s(v_buffer,
 		"Keys:\n"
-		"W -- Switch b/t Solid / Wireframe\n%s is active\n"		"\nT -- Switch texture On / Off\nTexture is %s\n"
+		"W -- Switch b/t Solid / Wireframe\n%s is active\n"
+		"\nT -- Switch texture On / Off\nTexture is %s\n"
 		"\nO -- Switch b / t Rendering Objects\n"
 		"\nR -- Switch Environment Reflection On / Off\nEnvironment Reflection is %s\n"
 		"\nN -- Switch Normal Mapping On/Off\nNormal Mapping is %s\n"

@@ -75,7 +75,6 @@
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="MainSystem.h" />
     <ClInclude Include="Planetoid.h" />
-    <ClInclude Include="PlanetSet.h" />
     <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="TextureList.h" />
     <ClInclude Include="Vertex.h" />
@@ -86,6 +85,7 @@
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="MainSystem.cpp" />
     <ClCompile Include="Planetoid.cpp" />
+    <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -16,6 +16,9 @@
     <Filter Include="Header Files\D3D">
       <UniqueIdentifier>{e251229e-105d-4111-88a6-4113e883a12c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\D3D">
+      <UniqueIdentifier>{837f020a-2ee1-4ef2-b4e3-13880f75096c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainSystem.h">
@@ -39,9 +42,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files\D3D</Filter>
     </ClInclude>
-    <ClInclude Include="PlanetSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Planetoid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,23 +50,26 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="d3dApp.cpp">
-      <Filter>Header Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectInput.cpp">
-      <Filter>Header Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="GfxStats.cpp">
-      <Filter>Header Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>Header Files\D3D</Filter>
-    </ClCompile>
     <ClCompile Include="MainSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Planetoid.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dApp.cpp">
+      <Filter>Source Files\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectInput.cpp">
+      <Filter>Source Files\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GfxStats.cpp">
+      <Filter>Source Files\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Source Files\D3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
