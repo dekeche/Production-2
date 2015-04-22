@@ -54,12 +54,17 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	}
 
 	InitAllVertexDeclarations();
-
 	//	Load Texture(s)
 		//	object textures
-	HR(D3DXCreateTextureFromFile(gd3dDevice, /*"texture.jpg"*/"Assets//pic.png", &mp_texture));
-	HR(D3DXCreateTextureFromFile(gd3dDevice, m_normalMap_filepath.c_str(), &mp_normal));
-	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, m_envMap_filepath.c_str(), &m_envMap_texture));
+	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, g_envMap_filepath.c_str(), &m_envMap_texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Phong_Texture_filepath.c_str(), &mp_Phong_Texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Phong_normalMap_filepath.c_str(), &mp_Phong_Normal));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Water_Texture_filepath.c_str(), &mp_Water_Texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Water_Normal1_filepath.c_str(), &mp_Water_Normal1));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Water_Normal2_filepath.c_str(), &mp_Water_Normal2));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Earth_Day_filepath.c_str(), &mp_Earth_Day));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Earth_Night_filepath.c_str(), &mp_Earth_Night));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, g_Earth_Normal_filepath.c_str(), &mp_Earth_Normal));
 		//	environment map texture
 
 	//	Create Environment Map mesh/cube
@@ -84,18 +89,32 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	m_spot_power = 16.0f;
 
-	buildAssignment4FX();
+	buildFX();
 
 
 
 	mConeMaterial = new EnhancedMaterial();
+	mEarthMaterial = new EarthMaterial();
+	mWaterMaterial = new WaterMaterial();
 
 	mConeMaterial->ConnectToEffect(m_assignment4_FX);
-
-	mConeMaterial->setTextures(mp_texture, mp_normal, m_envMap_texture);
-
+	mConeMaterial->setTextures(mp_Phong_Texture, mp_Phong_Normal, m_envMap_texture);
 	mConeMaterial->setMat(RED, GREEN, BLUE, 8.0f);
 	mConeMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
+
+	mEarthMaterial->ConnectToEffect(m_earth_FX);
+	mEarthMaterial->setTextures(mp_Earth_Day, mp_Earth_Normal, m_envMap_texture);
+	mEarthMaterial->setMat(RED, GREEN, BLUE, 8.0f);
+	mEarthMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
+	mEarthMaterial->AddNightTexture(mp_Earth_Night);
+
+
+	mWaterMaterial->ConnectToEffect(m_water_FX);
+	mWaterMaterial->setTextures(mp_Water_Texture, mp_Water_Normal1, m_envMap_texture);
+	mWaterMaterial->setMat(RED, GREEN, BLUE, 8.0f);
+	mWaterMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
+	mWaterMaterial->AddSecondNormalMap(mp_Water_Normal2);
+
     // repleace or add to the following object creation
     //m_Objects.push_back( new BaseObject3D );
 	BaseObject3D* temp;
@@ -107,7 +126,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	temp = new Sphere();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(mConeMaterial);
+	temp->setMaterial(mEarthMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Cone();
@@ -168,7 +187,14 @@ SkeletonClass::~SkeletonClass()
 
 	//	Destroy effects
 	ReleaseCOM(m_assignment4_FX);
-	ReleaseCOM(mp_texture);
+	ReleaseCOM(mp_Phong_Texture);
+	ReleaseCOM(mp_Phong_Normal);
+	ReleaseCOM(mp_Water_Texture);
+	ReleaseCOM(mp_Water_Normal1);
+	ReleaseCOM(mp_Water_Normal2);
+	ReleaseCOM(mp_Earth_Day);
+	ReleaseCOM(mp_Earth_Night);
+	ReleaseCOM(mp_Earth_Normal);
 
 	DestroyAllVertexDeclarations();
 
@@ -403,13 +429,12 @@ void SkeletonClass::updateScene(float dt)
 		mCameraRotationX = 2.0f * D3DX_PI;
 
 
-
-
-
 	// The camera position/orientation relative to world space can 
 	// change every frame based on input, so we need to rebuild the
 	// view matrix every frame with the latest changes.
 	buildViewMtx();
+
+	m_Objects[m_currentobject_index]->Update(dt);
 }
 
 
@@ -546,13 +571,15 @@ void SkeletonClass::ChangeObject(void)
 	m_key_O_down = true;
 }
 
-void SkeletonClass::buildAssignment4FX()
+void SkeletonClass::buildFX()
 {
 	//	Buffer for any errors
 	ID3DXBuffer* errors = 0;
 
 	//	Create FX from .fx file
-	HR(D3DXCreateEffectFromFile(gd3dDevice, "Assignment4.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_assignment4_FX, &errors));
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "phongReflectionMapping.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_assignment4_FX, &errors));
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "earth.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_earth_FX, &errors));
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "water.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_water_FX, &errors));
 
 	//	Check for & display any errors
 	if (errors)

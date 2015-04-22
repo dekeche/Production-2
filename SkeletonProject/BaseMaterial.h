@@ -43,7 +43,9 @@ public:
     virtual void ConnectToEffect( ID3DXEffect* effect );
 	void AddTexture(IDirect3DTexture9* tex);
 	void setMat(D3DXCOLOR ambient, D3DXCOLOR diffuse, D3DXCOLOR spec, float specPower );
-    void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
+    virtual void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
+
+	virtual void Update(float dt){};
 };
 //=============================================================================
 

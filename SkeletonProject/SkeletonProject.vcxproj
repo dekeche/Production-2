@@ -99,12 +99,14 @@
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="EarthMaterial.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />
     <ClCompile Include="EnhancedMaterial.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Torus.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="WaterMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -115,6 +117,7 @@
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="EarthMaterial.h" />
     <ClInclude Include="EnhancedMaterial.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
@@ -122,6 +125,7 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Torus.h" />
+    <ClInclude Include="WaterMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="pointlight.fx">
@@ -137,7 +141,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assignment4.fx">
+    <None Include="phongReflectionMapping.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="earth.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="water.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -19,9 +19,21 @@
 #pragma once
 //=============================================================================
 #include "d3dApp.h"
-#include "EnhancedMaterial.h"
+#include "EarthMaterial.h"
+#include "WaterMaterial.h"
 
 #include <vector>
+
+const std::string g_envMap_filepath = "Assets//Islands.dds";
+const std::string g_Phong_normalMap_filepath = "Assets//Islands.dds";
+const std::string g_Phong_Texture_filepath = "Assets//Islands.dds";
+const std::string g_Water_Texture_filepath = "Assets//Islands.dds";
+const std::string g_Water_Normal1_filepath = "Assets//Islands.dds";
+const std::string g_Water_Normal2_filepath = "Assets//Islands.dds";
+const std::string g_Earth_Day_filepath = "Assets//Islands.dds";
+const std::string g_Earth_Night_filepath = "Assets//Islands.dds";
+const std::string g_Earth_Normal_filepath = "Assets//Islands.dds";
+
 //=============================================================================
 class BaseObject3D;
 //=============================================================================
@@ -46,6 +58,8 @@ public:
 
 private:
 	EnhancedMaterial *mConeMaterial;
+	EarthMaterial *mEarthMaterial;
+	WaterMaterial *mWaterMaterial;
 
 	float mCameraRotationY;
 	float mCameraRotationX;
@@ -116,10 +130,10 @@ private:
 
 	//	Shaders
 	ID3DXEffect* m_current_effect;
-	ID3DXEffect* m_phong_FX;
 	const std::string PHONG_TECHNIQUE = "Technique";
-	ID3DXEffect* m_spot_FX;
 	ID3DXEffect* m_assignment4_FX;
+	ID3DXEffect* m_earth_FX;
+	ID3DXEffect* m_water_FX;
 
 
 		//	HANDLES
@@ -153,20 +167,26 @@ private:
 	D3DXHANDLE mh_environmentMap;*/
 
 		//	assignment4
-	void buildAssignment4FX();
-	void setAssignment4FX();
+	void buildFX();
+	void setFX();
 
 
-	IDirect3DTexture9* mp_texture;
-	IDirect3DTexture9* mp_normal;
+	IDirect3DTexture9* mp_Phong_Texture;
+	IDirect3DTexture9* mp_Phong_Normal;
+
+	IDirect3DTexture9* mp_Water_Texture;
+	IDirect3DTexture9* mp_Water_Normal1;
+	IDirect3DTexture9* mp_Water_Normal2;
+
+	IDirect3DTexture9* mp_Earth_Day;
+	IDirect3DTexture9* mp_Earth_Night;
+	IDirect3DTexture9* mp_Earth_Normal;
 
 
 
 	//	Assignment 4
 		//	Environment map
 			//	file path
-	std::string m_envMap_filepath = "Assets//Islands.dds";
-	std::string m_normalMap_filepath = "Assets//Islands.dds";
 			//	texture
 	IDirect3DCubeTexture9* m_envMap_texture = 0;
 			//	mesh

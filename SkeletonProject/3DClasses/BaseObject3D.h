@@ -42,6 +42,8 @@ public:
     // Replace or add to the following code as you progress with the material
 	void Create( IDirect3DDevice9* gd3dDevice);
     void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
+
+	void Update(float dt){ m_Material->Update(dt); };
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H
