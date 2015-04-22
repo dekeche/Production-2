@@ -104,7 +104,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	mEarthMaterial->ConnectToEffect(m_earth_FX);
 	mEarthMaterial->setTextures(mp_Earth_Day, mp_Earth_Normal, m_envMap_texture);
-	mEarthMaterial->setMat(RED, GREEN, BLUE, 8.0f);
+	mEarthMaterial->setMat(WHITE, WHITE, WHITE, 8.0f);
 	mEarthMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
 	mEarthMaterial->AddNightTexture(mp_Earth_Night);
 
@@ -462,7 +462,9 @@ void SkeletonClass::drawScene()
 
 
 	//	set values on material
-	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
+	EnhancedMaterial* currentMat = (EnhancedMaterial*)m_Objects[m_currentobject_index]->getMaterial();
+
+	currentMat->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
 	m_current_effect = m_Objects[m_currentobject_index]->getEffect();
 	if (m_current_effect != nullptr)
 	{

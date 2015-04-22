@@ -152,7 +152,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 	{
 		//get texture color.
 		float4 texColor;
-			texColor = tex2D(TexS, tex0);
+		texColor = tex2D(TexS, tex0);
 		/*if (tex0.x < gNightDayTime || tex0.x >= gNightDayTime + .5f)
 		{
 		}
@@ -163,6 +163,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 		specMtrl = texColor;
 		diffMtrl = texColor;
 		ambiMtrl = texColor;
+	return float4(0, 0, 0, 1);
 	}
 
 	//if normal mapping is on, reset normal to normal map

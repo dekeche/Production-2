@@ -30,9 +30,9 @@ const std::string g_Phong_Texture_filepath = "Assets//Islands.dds";
 const std::string g_Water_Texture_filepath = "Assets//Islands.dds";
 const std::string g_Water_Normal1_filepath = "Assets//Islands.dds";
 const std::string g_Water_Normal2_filepath = "Assets//Islands.dds";
-const std::string g_Earth_Day_filepath = "Assets//Islands.dds";
-const std::string g_Earth_Night_filepath = "Assets//Islands.dds";
-const std::string g_Earth_Normal_filepath = "Assets//Islands.dds";
+const std::string g_Earth_Day_filepath = "Assets//Earth-Day.jpg";
+const std::string g_Earth_Night_filepath = "Assets//Earth-Night.jpg";
+const std::string g_Earth_Normal_filepath = "Assets//Earth_Normal.png";
 
 //=============================================================================
 class BaseObject3D;
