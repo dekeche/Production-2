@@ -11,6 +11,7 @@
 
 #include "d3dApp.h"
 #include <vector>
+#include "SolarSystem.h"
 
 class MainSystem : public D3DApp
 {
@@ -29,9 +30,17 @@ public:
 	void buildProjMtx();
 private:
 
+	SolarSystem* mpSolarSystem;
+
 	float mCameraRotationY;
 	float mCameraRotationX;
 	float mCameraRadius;
-	float mCameraHeight;
+
+	bool i_Solid_frame;
+
+
+	D3DXMATRIX mView;
+	D3DXMATRIX mProj;
+	D3DXMATRIX mWorld;
 
 };

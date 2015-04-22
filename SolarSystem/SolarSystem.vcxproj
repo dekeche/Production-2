@@ -46,7 +46,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -72,21 +72,32 @@
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="Earth.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="MainSystem.h" />
+    <ClInclude Include="Moon.h" />
     <ClInclude Include="Planetoid.h" />
+    <None Include="Proto.fx">
+      <FileType>CppHeader</FileType>
+    </None>
     <ClInclude Include="SolarSystem.h" />
+    <ClInclude Include="Sun.h" />
     <ClInclude Include="TextureList.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Water.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="Earth.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="MainSystem.cpp" />
+    <ClCompile Include="Moon.cpp" />
     <ClCompile Include="Planetoid.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
+    <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Water.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

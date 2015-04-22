@@ -19,6 +19,15 @@
     <Filter Include="Source Files\D3D">
       <UniqueIdentifier>{837f020a-2ee1-4ef2-b4e3-13880f75096c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Planets">
+      <UniqueIdentifier>{7e1b1f8d-8069-4622-931e-428b06e84398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Planets">
+      <UniqueIdentifier>{d53aede7-026d-4e0e-a3b1-fc0669b73f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{2c944ee4-769d-446c-addf-97f3bfe14c67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainSystem.h">
@@ -48,6 +57,18 @@
     <ClInclude Include="TextureList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sun.h">
+      <Filter>Header Files\Planets</Filter>
+    </ClInclude>
+    <ClInclude Include="Earth.h">
+      <Filter>Header Files\Planets</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.h">
+      <Filter>Header Files\Planets</Filter>
+    </ClInclude>
+    <ClInclude Include="Moon.h">
+      <Filter>Header Files\Planets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainSystem.cpp">
@@ -71,5 +92,22 @@
     <ClCompile Include="Vertex.cpp">
       <Filter>Source Files\D3D</Filter>
     </ClCompile>
+    <ClCompile Include="Sun.cpp">
+      <Filter>Source Files\Planets</Filter>
+    </ClCompile>
+    <ClCompile Include="Earth.cpp">
+      <Filter>Source Files\Planets</Filter>
+    </ClCompile>
+    <ClCompile Include="Water.cpp">
+      <Filter>Source Files\Planets</Filter>
+    </ClCompile>
+    <ClCompile Include="Moon.cpp">
+      <Filter>Source Files\Planets</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Proto.fx">
+      <Filter>Header Files\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 #include "SolarSystem.h"
+#include "Sun.h"
 SolarSystem::SolarSystem()
 {
-
+	mPos = D3DXVECTOR3(0, 0, 0);
+	mpBase = new Sun(&mPos);
 };
 SolarSystem::~SolarSystem()
 {
@@ -10,7 +12,8 @@ SolarSystem::~SolarSystem()
 
 void SolarSystem::create()
 {
-	//Generate initial planet, the sun.
+	mpBase = new Sun(&mPos);
+	mpBase->create();
 };
 void SolarSystem::update(float dt)
 {
