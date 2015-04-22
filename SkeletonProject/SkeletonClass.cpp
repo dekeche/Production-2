@@ -240,8 +240,8 @@ void SkeletonClass::onResetDevice()
 
 	//	Effects
 	HR(m_assignment4_FX->OnResetDevice());
-	//HR(m_phong_FX->OnResetDevice());
-	//HR(m_spot_FX->OnResetDevice());
+	HR(m_earth_FX->OnResetDevice());
+	HR(m_water_FX->OnResetDevice());
 
 	// The aspect ratio depends on the backbuffer dimensions, which can 
 	// possibly change after a reset.  So rebuild the projection matrix.
@@ -463,7 +463,7 @@ void SkeletonClass::drawScene()
 
 	//	set values on material
 	mConeMaterial->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
-
+	m_current_effect = m_Objects[m_currentobject_index]->getEffect();
 	if (m_current_effect != nullptr)
 	{
 

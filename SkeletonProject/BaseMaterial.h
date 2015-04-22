@@ -46,6 +46,8 @@ public:
     virtual void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
 
 	virtual void Update(float dt){};
+
+	ID3DXEffect* getEffect(){ return m_Effect; }
 };
 //=============================================================================
 
