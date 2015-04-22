@@ -58,6 +58,7 @@ public:
 
 private:
 	EnhancedMaterial *mConeMaterial;
+	EnhancedMaterial* currentMat;
 	EarthMaterial *mEarthMaterial;
 	WaterMaterial *mWaterMaterial;
 

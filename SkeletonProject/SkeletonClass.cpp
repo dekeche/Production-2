@@ -171,6 +171,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	m_current_effect = m_assignment4_FX;
 
 
+	currentMat = (EnhancedMaterial*)m_Objects[m_currentobject_index]->getMaterial();
+
 	onResetDevice();
 
 }
@@ -462,7 +464,6 @@ void SkeletonClass::drawScene()
 
 
 	//	set values on material
-	EnhancedMaterial* currentMat = (EnhancedMaterial*)m_Objects[m_currentobject_index]->getMaterial();
 
 	currentMat->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
 	m_current_effect = m_Objects[m_currentobject_index]->getEffect();
@@ -548,7 +549,7 @@ void SkeletonClass::buildViewMtx()
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, upVec, rightVec);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
-	mConeMaterial->setViewMtx(pos, target, up);
+	currentMat->setViewMtx(pos, target, up);
 }
 
 void SkeletonClass::buildProjMtx()
@@ -571,6 +572,9 @@ void SkeletonClass::ChangeObject(void)
 
 	//	Set m_mousedown to true so that we only iterate once per mouse click
 	m_key_O_down = true;
+
+
+	currentMat = (EnhancedMaterial*)m_Objects[m_currentobject_index]->getMaterial();
 }
 
 void SkeletonClass::buildFX()

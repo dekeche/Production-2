@@ -163,7 +163,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 		specMtrl = texColor;
 		diffMtrl = texColor;
 		ambiMtrl = texColor;
-	return float4(0, 0, 0, 1);
+	//return float4(0, 0, 0, 1);
 	}
 
 	//if normal mapping is on, reset normal to normal map
