@@ -152,14 +152,28 @@ float2 tex0 : TEXCOORD5) : COLOR
 	{
 		//get texture color.
 		float4 texColor;
-		texColor = tex2D(TexS, tex0);
-		/*if (tex0.x < gNightDayTime || tex0.x >= gNightDayTime + .5f)
+		if (gNightDayTime < 0.5)
 		{
+			if (tex0.x < gNightDayTime || tex0.x >= gNightDayTime + .5f)
+			{
+				texColor = tex2D(TexS, tex0);
+			}
+			else
+			{
+				texColor = tex2D(TexNS, tex0);
+			}
 		}
 		else
 		{
-			texColor = tex2D(TexNS, tex0);
-		}*/
+			if (tex0.x < gNightDayTime && tex0.x >= gNightDayTime - .5f)
+			{
+				texColor = tex2D(TexS, tex0);
+			}
+			else
+			{
+				texColor = tex2D(TexNS, tex0);
+			}
+		}
 		specMtrl = texColor;
 		diffMtrl = texColor;
 		ambiMtrl = texColor;
