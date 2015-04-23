@@ -29,6 +29,8 @@ protected:
 	ID3DXMesh* m_MeshObject;
 	BaseMaterial* m_Material;
 
+	bool m_Sphere;
+
 protected:
 	virtual void LoadObject(IDirect3DDevice9* gd3dDevice) = 0;
 

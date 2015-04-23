@@ -51,12 +51,12 @@ uniform extern bool gRecflectDiffuseOn;
 struct OutputVS
 {
 	float4 posH		: POSITION0;
-	float3 normal : TEXCOORD0;
-	float3 tangent : TEXCOORD1;
-	float3 binormal : TEXCOORD2;
-	float3 position : TEXCOORD3;
-	float3 trueNormal : TEXCOORD4;
-	float2 tex0 : TEXCOORD5;
+	float2 tex0 : TEXCOORD0;
+	float3 normal : TEXCOORD1;
+	float3 tangent : TEXCOORD2;
+	float3 binormal : TEXCOORD3;
+	float3 position : TEXCOORD4;
+	float3 trueNormal : TEXCOORD5;
 };
 
 sampler EnvMapS = sampler_state
@@ -135,13 +135,9 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 
 
 //	Returns a float4 that is the COLOR.
-float4 NormalMapPS(float3 normal : TEXCOORD0,
-float3 tangent : TEXCOORD1,
-float3 binormal : TEXCOORD2,
-float3 position : TEXCOORD3,
-float3 trueNormal : TEXCOORD4,
-float2 tex0 : TEXCOORD5) : COLOR
+float4 NormalMapPS(float2 tex0 : TEXCOORD0, float3 normal : TEXCOORD1, float3 tangent : TEXCOORD2, float3 binormal : TEXCOORD3, float3 position : TEXCOORD4, float3 trueNormal : TEXCOORD5) : COLOR
 {
+	bool night = false;
 	//create local values for Mtrl.
 	float4 specMtrl = gSpecMtrl;
 	float4 diffMtrl = gDiffuseMtrl;
@@ -161,6 +157,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 			else
 			{
 				texColor = tex2D(TexNS, tex0);
+				night = true;
 			}
 		}
 		else
@@ -172,12 +169,12 @@ float2 tex0 : TEXCOORD5) : COLOR
 			else
 			{
 				texColor = tex2D(TexNS, tex0);
+				night = true;
 			}
 		}
 		specMtrl = texColor;
 		diffMtrl = texColor;
 		ambiMtrl = texColor;
-	//return float4(0, 0, 0, 1);
 	}
 
 	//if normal mapping is on, reset normal to normal map
@@ -244,7 +241,7 @@ float2 tex0 : TEXCOORD5) : COLOR
 	}
 	//calculate final color.
 	float4 all_together = float4(((ambient*0.2f + spec* 0.15f + diffuse * 0.65f)), gDiffuseMtrl.a);
-
+	//all_together = float4(texColor);
 	//return color.
     return all_together;
 }

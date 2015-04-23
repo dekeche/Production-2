@@ -136,10 +136,10 @@
     <None Include="spotlight.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="earth.fx">
+    <None Include="water.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="water.fx">
+    <None Include="earth.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

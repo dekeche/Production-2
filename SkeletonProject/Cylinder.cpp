@@ -17,6 +17,7 @@ Cylinder::Cylinder(int height, float radius, int sideFacetsNum) : BaseObject3D()
 	mHeight = height;
 	mRadius = radius;
 	mSideFacetsNum = sideFacetsNum;
+	m_Sphere = false;
 }
 
 //-----------------------------------------------------------------------------

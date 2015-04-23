@@ -16,7 +16,7 @@ Sphere::Sphere(float radius, int sideFacetsNum) : BaseObject3D()
 {
 	mRadius = radius;
 	mSideFacetsNum = sideFacetsNum;
-
+	m_Sphere = true;
 }
 
 //-----------------------------------------------------------------------------

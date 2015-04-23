@@ -48,12 +48,12 @@ uniform extern bool gRecflectDiffuseOn;
 struct OutputVS
 {
 	float4 posH		: POSITION0;
-	float3 normal : TEXCOORD0;
-	float3 tangent : TEXCOORD1;
-	float3 binormal : TEXCOORD2;
-	float3 position : TEXCOORD3;
-	float3 trueNormal : TEXCOORD4;
-	float2 tex0 : TEXCOORD5;
+	float2 tex0 : TEXCOORD0;
+	float3 normal : TEXCOORD1;
+	float3 tangent : TEXCOORD2;
+	float3 binormal : TEXCOORD3;
+	float3 position : TEXCOORD4;
+	float3 trueNormal : TEXCOORD5;
 };
 
 sampler EnvMapS = sampler_state
@@ -123,12 +123,12 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 
 
 //	Returns a float4 that is the COLOR.
-float4 NormalMapPS(float3 normal : TEXCOORD0,
-float3 tangent : TEXCOORD1,
-float3 binormal : TEXCOORD2,
-float3 position : TEXCOORD3,
-float3 trueNormal : TEXCOORD4,
-float2 tex0 : TEXCOORD5) : COLOR
+float4 NormalMapPS(float2 tex0 : TEXCOORD0,
+float3 normal : TEXCOORD1,
+float3 tangent : TEXCOORD2,
+float3 binormal : TEXCOORD3,
+float3 position : TEXCOORD4,
+float3 trueNormal : TEXCOORD5) : COLOR
 {
 	//create local values for Mtrl.
 	float4 specMtrl = gSpecMtrl;

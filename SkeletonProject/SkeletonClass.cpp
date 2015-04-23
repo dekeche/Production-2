@@ -98,7 +98,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mWaterMaterial = new WaterMaterial();
 
 	mConeMaterial->ConnectToEffect(m_assignment4_FX);
-	mConeMaterial->setTextures(mp_Phong_Texture, mp_Phong_Normal, m_envMap_texture);
+	mConeMaterial->setTextures(mp_Earth_Day, mp_Phong_Normal, m_envMap_texture);
 	mConeMaterial->setMat(RED, GREEN, BLUE, 8.0f);
 	mConeMaterial->setLight(m_Light_ambient, m_Light_diffuse, m_Light_specular, m_Light_vector_W);
 
@@ -126,7 +126,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	temp = new Sphere();
 	temp->Create(gd3dDevice);
-	temp->setMaterial(mEarthMaterial);
+	temp->setMaterial(mConeMaterial);
 	m_Objects.push_back(temp);
 
 	temp = new Cone();
@@ -461,7 +461,7 @@ void SkeletonClass::drawScene()
 	{
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	}
-
+	HR(gd3dDevice->SetRenderState(D3DRS_WRAP0, D3DWRAP_U));
 
 	//	set values on material
 

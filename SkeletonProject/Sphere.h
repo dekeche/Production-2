@@ -27,7 +27,7 @@ protected:
 	void LoadObject(IDirect3DDevice9* gd3dDevice);
 
 public:
-	Sphere(float radius = 3, int sideFacetsNum = 10);
+	Sphere(float radius = 3, int sideFacetsNum = 25);
 	~Sphere(void);
 };
 //=============================================================================

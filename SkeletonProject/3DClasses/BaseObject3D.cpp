@@ -39,15 +39,42 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 	VertexNMap* vertices = 0;
 	HR(clone->LockVertexBuffer(0, (void**)&vertices));
 
+	D3DXVECTOR3 maxPoint(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	D3DXVECTOR3 minPoint(FLT_MAX, FLT_MAX, FLT_MAX);
+	for (UINT i = 0; i < clone->GetNumVertices(); i++)
+	{
+		D3DXVec3Maximize(&maxPoint, &maxPoint, &vertices[i].pos);
+		D3DXVec3Minimize(&minPoint, &minPoint, &vertices[i].pos);
+	}
+	float a = minPoint.z;
+	float b = maxPoint.z;
+	float h = b - a;
 	for (UINT i = 0; i < clone->GetNumVertices(); i++)
 	{
 		D3DXVECTOR3 p = vertices[i].pos;
+		float u;
+		float v;
+		float theta;
 
-		float theta = atan2f(p.z, p.x) + D3DX_PI;
-		float phi = acosf(p.y / sqrtf(p.x*p.x + p.y*p.y + p.z*p.z));
+		if (m_Sphere)
+		{
+			theta = atan2f(p.x, p.y);// + D3DX_PI;
+			float phi = acosf(p.z / sqrtf(p.x*p.x + p.y*p.y + p.z*p.z));
+			v = phi / D3DX_PI;
+			
+		}
+		else
+		{
+			float x = vertices[i].pos.x;
+			float z = vertices[i].pos.y;
+			float y = vertices[i].pos.z;
+			theta = atan2f(z, x);
+			float y2 = y - b;
+			v = y2 / -h;
+		}
 
-		float u = theta / (2.0f*(D3DX_PI));
-		float v = phi / D3DX_PI;
+		u = theta / (2.0f*(D3DX_PI));
+
 
 		vertices[i].tex0.x = u;
 		vertices[i].tex0.y = v;

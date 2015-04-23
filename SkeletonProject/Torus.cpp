@@ -18,6 +18,7 @@ Torus::Torus(float iRadius, float oRadius, int sideFacetsNum) : BaseObject3D()
 	mOuterRadius = oRadius;
 	mSideFacetsNum = sideFacetsNum;
 
+	m_Sphere = true;
 }
 
 //-----------------------------------------------------------------------------
