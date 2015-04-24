@@ -24,12 +24,12 @@
 
 #include <vector>
 
-const std::string g_envMap_filepath = "Assets//Islands.dds";
-const std::string g_Phong_normalMap_filepath = "Assets//Islands.dds";
-const std::string g_Phong_Texture_filepath = "Assets//Islands.dds";
-const std::string g_Water_Texture_filepath = "Assets//Islands.dds";
-const std::string g_Water_Normal1_filepath = "Assets//Islands.dds";
-const std::string g_Water_Normal2_filepath = "Assets//Islands.dds";
+const std::string g_envMap_filepath = "Assets//Nebula.dds";
+const std::string g_Phong_normalMap_filepath = "Assets//6624-normal.jpg";
+const std::string g_Phong_Texture_filepath = "Assets//WaterText.png";
+const std::string g_Water_Texture_filepath = "Assets//WaterText.png";
+const std::string g_Water_Normal1_filepath = "Assets//weave_normal.jpg";
+const std::string g_Water_Normal2_filepath = "Assets//rocknorm5.jpg";
 const std::string g_Earth_Day_filepath = "Assets//Earth-Day.jpg";
 const std::string g_Earth_Night_filepath = "Assets//Earth-Night.jpg";
 const std::string g_Earth_Normal_filepath = "Assets//Earth_Normal.png";

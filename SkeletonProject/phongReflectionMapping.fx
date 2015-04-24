@@ -49,11 +49,8 @@ struct OutputVS
 {
 	float4 posH		: POSITION0;
 	float2 tex0 : TEXCOORD0;
-	float3 normal : TEXCOORD1;
-	float3 tangent : TEXCOORD2;
-	float3 binormal : TEXCOORD3;
-	float3 position : TEXCOORD4;
-	float3 trueNormal : TEXCOORD5;
+	float3 normal : TEXCOORD2;
+	float3 position : TEXCOORD3;
 };
 
 sampler EnvMapS = sampler_state
@@ -62,7 +59,7 @@ sampler EnvMapS = sampler_state
 	MinFilter = LINEAR;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-	AddressV = WRAP;
+	AddressU = WRAP;
 	AddressV = WRAP;
 };
 
@@ -72,7 +69,7 @@ sampler TexS = sampler_state
 	MinFilter = LINEAR;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-	AddressV = WRAP;
+	AddressU = WRAP;
 	AddressV = WRAP;
 };
 
@@ -82,7 +79,7 @@ sampler NormalMapS = sampler_state
 	MinFilter = ANISOTROPIC;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-	AddressV = WRAP;
+	AddressU = WRAP;
 	AddressV = WRAP;
 };
 
@@ -95,20 +92,10 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 	//	Transform the normal to be in world space
 	outVS.normal = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
 	//	NORMALIZE IT
-	outVS.trueNormal = outVS.normal = normalize(outVS.normal);
-	outVS.tangent = normalize(tangentL);
-	outVS.binormal = normalize(binormalL);
+	outVS.normal = normalize(outVS.normal);
 
 	//	Transform vertex position to world space
 	outVS.position = mul(float4(posL, 1.0f), gWorld).xyz;
-
-	//if normal mapping is on, set all values for creation of TBN matrix.
-	if (gNormalMappingOn)
-	{
-		outVS.normal = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
-		outVS.tangent = mul(float4(tangentL, 0.0f), gWorldInverseTranspose).xyz;
-		outVS.binormal = mul(float4(binormalL, 0.0f), gWorldInverseTranspose).xyz;
-	}
 
 	// not used in shader, but breaks if absent.
 	outVS.posH = mul(float4(posL, 1.0f), gWVP);
@@ -124,11 +111,8 @@ OutputVS NormalMapVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float3 t
 
 //	Returns a float4 that is the COLOR.
 float4 NormalMapPS(float2 tex0 : TEXCOORD0,
-float3 normal : TEXCOORD1,
-float3 tangent : TEXCOORD2,
-float3 binormal : TEXCOORD3,
-float3 position : TEXCOORD4,
-float3 trueNormal : TEXCOORD5) : COLOR
+float3 normal : TEXCOORD2,
+float3 position : TEXCOORD3) : COLOR
 {
 	//create local values for Mtrl.
 	float4 specMtrl = gSpecMtrl;
@@ -148,24 +132,14 @@ float3 trueNormal : TEXCOORD5) : COLOR
 	//if normal mapping is on, reset normal to normal map
 	if (gNormalMappingOn)
 	{
-		//create Tangent, Binormal, Normal matrix
-		float3x3 TBN;
-		TBN[0] = tangent;
-		TBN[1] = binormal;
-		TBN[2] = normal;
-
 		//get normal at position.
 		normal = tex2D(NormalMapS, tex0);
 		//change to [-1,1] range
 		normal = 2.0f*normal - 1.0f;
 		//normalize
-		//normal = mul(TBN, normal);
 		normal = normalize(normal);
 		//calculate blend between original normal and this, Strength of the normal
-		normal = ((normal*(gNormalBlend))+(trueNormal*(1.0f - gNormalBlend)));
-		//normal = normalize(normalTest);
-
-		//set normal to world space.
+		normal = normal * gNormalBlend;
 	}
 
 	//calculate vector to eye from position.

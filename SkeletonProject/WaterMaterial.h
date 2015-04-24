@@ -21,8 +21,11 @@ protected:
 
 	float xRate;
 	float yRate;
+
+	float xDispl;
+	float yDispl;
 public:
-	WaterMaterial(void) :EnhancedMaterial(){ xRate = .1f; yRate = .05f; };
+	WaterMaterial(void);
 	virtual ~WaterMaterial(void){};
 
 	virtual void ConnectToEffect(ID3DXEffect* effect);
