@@ -1,10 +1,11 @@
 //=============================================================================
-//                              BaseMaterial
+//                              EarthMaterial
 //
 // Writen by Jesse McKinley, 2015
 // EGP 300-101, Graphics Programming II  - skeleton project
 //
 // Enhanced class of BaseMaterial, used for Assignment 4
+// Planed to implement earth-like world, did not succed.
 //=============================================================================
 #pragma once
 #include "d3dApp.h"

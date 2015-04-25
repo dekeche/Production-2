@@ -127,9 +127,6 @@
     <None Include="phongReflectionMapping.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="phong.fx">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="pointlight.fx">
       <Filter>Shaders</Filter>
     </None>
@@ -140,6 +137,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="earth.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="skybox.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

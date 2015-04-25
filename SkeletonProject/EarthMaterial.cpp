@@ -15,7 +15,7 @@ void EarthMaterial::AddNightTexture(IDirect3DTexture9* night)
 void EarthMaterial::Update(float dt)
 {
 	mDayNightLine += mDayNightRate*dt;
-	if (mDayNightLine >= 1.0f)
+	if (mDayNightLine > 1.0f)
 		mDayNightLine -= 1.0f;
 
 	HR(m_Effect->SetFloat(m_gNightDayTime, mDayNightLine));

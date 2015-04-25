@@ -131,22 +131,6 @@ float4 NormalMapPS(float2 tex0 : TEXCOORD0,
 	float4 diffMtrl = gDiffuseMtrl;
 	float4 ambiMtrl = gAmbientMtrl;
 
-	//if texture is on, reset local Mtrl values to texture values.
-	if (gTextureOn)
-	{
-		//get texture color.
-		float4 texColor;
-		float4 texColor1 = tex2D(TexS, tex0);
-		float4 texColor2 = tex2D(TexNS, tex0);
-
-		texColor = texColor2;
-
-		specMtrl = texColor;
-		diffMtrl = texColor;
-		ambiMtrl = texColor;
-
-	}
-
 	//if normal mapping is on, reset normal to normal map
 	if (gNormalMappingOn)
 	{
@@ -158,6 +142,44 @@ float4 NormalMapPS(float2 tex0 : TEXCOORD0,
 		normal = normalize(normal);
 		//calculate blend between original normal and this, Strength of the normal
 		normal = normal * gNormalBlend;
+	}
+
+	//if texture is on, reset local Mtrl values to texture values.
+	if (gTextureOn)
+	{
+		//get texture color.
+		float4 texColor;
+		float4 texColor1 = tex2D(TexS, tex0);
+		float4 texColor2 = tex2D(TexNS, tex0);
+
+		//float diff = min(abs(tex0.x - 0.5), abs(tex0.x + 0.5));
+		if (gNightDayTime <= 0.5f)
+		{
+			if (tex0.x >= gNightDayTime && tex0.x <= (gNightDayTime + 0.5f))
+			{
+				texColor = texColor1;
+			}
+			else
+			{
+				texColor = texColor2;
+			}
+		}
+		else
+		{
+			if (tex0.x <= gNightDayTime && tex0.x >= (gNightDayTime - 0.5f))
+			{
+				texColor = texColor2;
+			}
+			else
+			{
+				texColor = texColor1;
+			}
+		}
+
+
+		specMtrl = texColor;
+		diffMtrl = texColor;
+		ambiMtrl = texColor;
 	}
 
 	//calculate vector to eye from position.

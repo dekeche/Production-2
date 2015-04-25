@@ -136,7 +136,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="phong.fx">
+    <None Include="skybox.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

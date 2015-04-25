@@ -58,7 +58,7 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 
 		if (m_Sphere)
 		{
-			theta = atan2f(p.x, p.y);// + D3DX_PI;
+			theta = atan2f(p.x, p.y);// +D3DX_PI;
 			float phi = acosf(p.z / sqrtf(p.x*p.x + p.y*p.y + p.z*p.z));
 			v = phi / D3DX_PI;
 			
@@ -76,7 +76,7 @@ void BaseObject3D::Create(IDirect3DDevice9* gd3dDevice)
 		u = theta / (2.0f*(D3DX_PI));
 
 
-		vertices[i].tex0.x = u;
+		vertices[i].tex0.x = u+0.5;
 		vertices[i].tex0.y = v;
 	}
 

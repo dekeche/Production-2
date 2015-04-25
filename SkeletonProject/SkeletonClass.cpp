@@ -91,6 +91,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	buildFX();
 
+	HR(m_env_FX->SetTexture(m_env_text, m_envMap_texture));
 
 
 	mConeMaterial = new EnhancedMaterial();
@@ -471,17 +472,31 @@ void SkeletonClass::drawScene()
 	{
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	}
+	//HR(gd3dDevice->SetRenderState(D3DRS_WRAP1, D3DWRAP_U));
 	HR(gd3dDevice->SetRenderState(D3DRS_WRAP0, D3DWRAP_U));
-	HR(gd3dDevice->SetRenderState(D3DRS_WRAP1, D3DWRAP_U));
 
 	//	set values on material
 
 	currentMat->setValues(i_texture_on, i_norm_mapping_on, i_evir_reflect_on, i_norm_strength, i_blend, i_spec_coefficient, i_reflect_diffuse_on);
+	UINT numPasses = 0;
+	HR(m_env_FX->Begin(&numPasses, 0));
+		HR(m_env_FX->BeginPass(0));
+		HR(gd3dDevice->SetTransform(D3DTS_WORLD, &mWorld));
+		HR(gd3dDevice->SetTransform(D3DTS_VIEW, &mView));
+		HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &mProj));
+		D3DXMATRIX viewProjMat = mWorld*mView*mProj;
+		HR(m_env_FX->SetMatrix(m_env_wvp, &viewProjMat));
+		HR(m_env_FX->CommitChanges());
+		HR(m_envMap_mesh->DrawSubset(0));
+
+		HR(m_env_FX->EndPass());
+	HR(m_env_FX->End());
+
 	m_current_effect = m_Objects[m_currentobject_index]->getEffect();
 	if (m_current_effect != nullptr)
 	{
 
-		UINT numPasses = 0;
+		numPasses = 0;
 		HR(m_current_effect->Begin(&numPasses, 0));
 		//	Move this line of code above so that the mesh would ACTUALLY draw. Weird.
 //		HR(m_envMap_mesh->DrawSubset(0));
@@ -597,7 +612,12 @@ void SkeletonClass::buildFX()
 	HR(D3DXCreateEffectFromFile(gd3dDevice, "phongReflectionMapping.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_assignment4_FX, &errors));
 	HR(D3DXCreateEffectFromFile(gd3dDevice, "earth.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_earth_FX, &errors));
 	HR(D3DXCreateEffectFromFile(gd3dDevice, "water.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_water_FX, &errors));
+	HR(D3DXCreateEffectFromFile(gd3dDevice, "skybox.fx", 0, 0, D3DXSHADER_DEBUG, 0, &m_env_FX, &errors));
 
+
+	int test = 0;
+	m_env_text = m_env_FX->GetParameterByName(0, "gEnvMap");
+	m_env_wvp = m_env_FX->GetParameterByName(0, "gWVP");
 	//	Check for & display any errors
 	if (errors)
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
