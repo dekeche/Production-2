@@ -136,10 +136,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="skybox.fx">
+    <None Include="skybox.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="phongReflectionMapping.fx">

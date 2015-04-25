@@ -27,5 +27,27 @@ Notes:
 	- Ambient is a BLUE color
 	- Specular is a RED color
 
+* Three diffrent Shaders:
+	- Normal, follows assignment guidelines.
+	- Water, one static normal map with a moving map gives the appearance of water.
+	- Earth-Like, Uses two shaders and a threashold value to create the illusion of a day/night cycle.
+
+* Object order:
+	- Cylinder - normal
+	- Sphere - Normal
+	- Sphere - Earth-Like
+	- Sphere - Water
+	- Cone - Normal
+	- Torus - Normal
+	- Teapot - Normal
+
+* Due to the size of the textures used, there is a significant loading time.
+	-About 12 seconds.
 
 Known bugs:
+* On sphere objects, there is a small fragmented triangle.
+
+* On the Earthlike object, there is a graphical glitch with the day/night rotation.
+	- This may be due to wrapping and texture cordinates on a sphere.
+
+* The camera rotates on the xz and yz axis, which causes the object to rotate at times.
