@@ -139,8 +139,10 @@
     <None Include="earth.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="skybox.fx">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="skybox.fx">
       <Filter>Shaders</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

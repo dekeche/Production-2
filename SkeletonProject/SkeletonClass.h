@@ -135,11 +135,6 @@ private:
 	ID3DXEffect* m_assignment4_FX;
 	ID3DXEffect* m_earth_FX;
 	ID3DXEffect* m_water_FX;
-	ID3DXEffect* m_env_FX;
-
-	D3DXHANDLE m_env_text;
-	D3DXHANDLE m_env_wvp;
-
 
 
 		//	HANDLES
